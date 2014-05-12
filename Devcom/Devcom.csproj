@@ -43,11 +43,14 @@
     <Compile Include="CommandResult.cs" />
     <Compile Include="ConvarAttribute.cs" />
     <Compile Include="DevcomCategoryAttribute.cs" />
-    <Compile Include="Devcom.cs" />
-    <Compile Include="DevCommand.cs" />
+    <Compile Include="DevcomContext.cs" />
+    <Compile Include="DevcomEngine.cs" />
+    <Compile Include="CommandDef.cs" />
     <Compile Include="CommandAttribute.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="System\BaseCommands.cs" />
+    <Compile Include="Util.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

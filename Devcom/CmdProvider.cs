@@ -7,28 +7,26 @@ using System.Reflection;
 
 namespace Devcom
 {
-    public static class CmdProvider
+    internal static class CmdProvider
     {
-        public static List<DevCommand> FindThemAll()
+        public static Dictionary<string, CommandDef> FindThemAll()
         {
-            var list = new List<DevCommand>();
-            var ass = Assembly.GetExecutingAssembly();
-            list.AddRange(SearchAssembly(ass));
+            var list = new Dictionary<string, CommandDef>();
+            SearchAssembly(Assembly.GetExecutingAssembly(), list);
             foreach(var asm in AppDomain.CurrentDomain.GetAssemblies())
             {
-                list.AddRange(SearchAssembly(asm));
+                SearchAssembly(asm, list);
                 foreach(var asmr in asm.GetReferencedAssemblies().Select(Assembly.Load))
                 {
-                    list.AddRange(SearchAssembly(asmr));
+                    SearchAssembly(asmr, list);
                 }
             }
             return list;
         }
 
-        private static Dictionary<string, DevCommand> SearchAssembly(Assembly ass)
+        private static void SearchAssembly(Assembly ass, Dictionary<string, CommandDef> cmdlist)
         {
-            var cmdlist = new Dictionary<string, DevCommand>();
-            foreach(var cl in ass.GetTypes().Where(t => t.IsClass && t.IsVisible))           
+            foreach(var cl in ass.GetTypes().Where(t => t.IsClass))           
             {
                 string cat = "";
                 bool found = false;
@@ -41,18 +39,12 @@ namespace Devcom
 
                 if (!found) continue;
 
-                foreach(var method in cl.GetMethods()
-                .Where(m => m.IsStatic && m.IsPublic))
+                foreach (var command in cl.GetMethods()
+                    .Where(m => m.IsStatic && m.IsPublic).SelectMany(method => method.GetCustomAttributes<CommandAttribute>().Where(attr => !cmdlist.ContainsKey(Util.Qualify(cat, attr.Name))).Select(attr => new CommandDef(method, attr.Name, attr.Description, cat))))
                 {
-                    foreach(var attr in method.GetCustomAttributes<CommandAttribute>())
-                    {
-                        Console.WriteLine("Found function {0} ({1})", attr.Name, method.Name);
-                        var command = new DevCommand(method, attr.Name, attr.Description, cat);
-                        cmdlist[command.QualifiedName.ToLower()] = command;
-                    }
+                    cmdlist[command.QualifiedName.ToLower()] = command;
                 }
             }
-            return cmdlist;
         }
     }
 }

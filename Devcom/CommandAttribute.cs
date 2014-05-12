@@ -21,17 +21,14 @@ namespace Devcom
             private set;
         }
 
-        public string Category
+        public CommandAttribute(string name, string desc = "")
         {
-            get;
-            private set;
-        }
-
-        public CommandAttribute(string name, string desc = "", string category = "")
-        {
+            if (name.Any(c => !Char.IsLetterOrDigit(c) && !"_-+".Contains(c)))
+            {
+                throw new ArgumentException("Command names can only contain letters, numbers, underscores, dashes and plus symbols.");
+            }
             Name = name;
             Description = desc;
-            Category = category;
         }
     }
 }

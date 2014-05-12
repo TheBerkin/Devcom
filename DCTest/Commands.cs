@@ -10,23 +10,8 @@ namespace DCTest
     [DevcomCategory]
     public class Commands
     {
-        [Command("something", "Does something.", "do")]
-        public static void DoSomething()
-        {
-            Console.WriteLine("Something.");
-        }
-
-        [Command("print", "Prints some text.")]
-        public static void Print(params object[] message)
-        {
-            foreach(object msg in message)
-            {
-                Console.WriteLine(msg);
-            }
-        }
-
         [Command("printc", "Prints some colored text.")]
-        public static void PrintColor(string colorName, params object[] message)
+        public static void PrintColor(DevcomContext context, string colorName, params object[] message)
         {
             ConsoleColor color;
             if (!Enum.TryParse(colorName, true, out color)) return;
@@ -36,6 +21,12 @@ namespace DCTest
                 Console.WriteLine(msg);
             }
             Console.ResetColor();
+        }
+
+        [Command("add", "Adds two numbers. Because why not.")]
+        public static void Add(DevcomContext context, float a, float b)
+        {
+            DevcomEngine.Print(a + b);
         }
     }
 }
