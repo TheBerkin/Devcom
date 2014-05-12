@@ -49,9 +49,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Devcom\Devcom.csproj">
+    <ProjectReference Include="..\Devcom\DeveloperCommands.csproj">
       <Project>{47601232-d1d9-4ddc-8277-f5cb72461d16}</Project>
-      <Name>Devcom</Name>
+      <Name>DeveloperCommands</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

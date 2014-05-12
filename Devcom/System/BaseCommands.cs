@@ -1,25 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Devcom
+namespace DeveloperCommands
 {
     [DevcomCategory]
-    internal class BaseCommands
+    internal static class BaseCommands
     {
         [Command("cat", "Changes the active category. Pass $ or an empty string to return to root.")]
         public static void Cat(DevcomContext context, string category)
         {
             var cat = category.ToLower().Trim();
-            DevcomEngine.CurrentCategory = cat == "$" ? "" : cat;
+            Devcom.CurrentCategory = cat == "$" ? "" : cat;
         }
 
         [Command("root", "Returns the active category to the root.")]
         public static void Root(DevcomContext context)
         {
-            DevcomEngine.CurrentCategory = "";
+            Devcom.CurrentCategory = "";
         }
 
         [Command("echo", "Prints some text.")]
@@ -27,7 +28,29 @@ namespace Devcom
         {
             foreach (object msg in message)
             {
-                DevcomEngine.Print(msg);
+                context.Post(msg);
+            }
+        }
+
+        [Command("exec", "Executes commands from one or more files.")]
+        public static void Exec(DevcomContext context, params string[] files)
+        {
+            foreach (string path in files)
+            {
+                try
+                {
+                    using (var reader = new StreamReader(path))
+                    {
+                        while (!reader.EndOfStream)
+                        {
+                            Devcom.Input(context, reader.ReadLine().Trim());
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    context.PostFormat("Failed to load {0}: '{1}'", path, ex.Message);
+                }
             }
         }
     }

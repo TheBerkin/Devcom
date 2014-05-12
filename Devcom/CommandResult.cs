@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Devcom
+namespace DeveloperCommands
 {
     public enum CommandResult
     {

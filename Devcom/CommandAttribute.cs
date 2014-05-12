@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Devcom
+namespace DeveloperCommands
 {
     [AttributeUsage(AttributeTargets.Method)]
     public sealed class CommandAttribute : Attribute
@@ -27,7 +27,7 @@ namespace Devcom
             {
                 throw new ArgumentException("Command names can only contain letters, numbers, underscores, dashes and plus symbols.");
             }
-            Name = name;
+            Name = name.ToLower();
             Description = desc;
         }
     }

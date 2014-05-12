@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 
-namespace Devcom
+namespace DeveloperCommands
 {
     internal static class CmdProvider
     {

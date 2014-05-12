@@ -6,9 +6,9 @@ using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Devcom
+namespace DeveloperCommands
 {
-    public static class DevcomEngine
+    public static class Devcom
     {
         public static PrintCallback OnPrint;
 

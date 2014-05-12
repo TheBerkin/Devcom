@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Devcom
+namespace DeveloperCommands
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class DevcomCategoryAttribute : Attribute
@@ -17,6 +17,10 @@ namespace Devcom
 
         public DevcomCategoryAttribute(string category)
         {
+            if (category.Any(c => !Char.IsLetterOrDigit(c) && !"_-+".Contains(c)))
+            {
+                throw new ArgumentException("Command categories can only contain letters, numbers, underscores, and dashes.");
+            }
             Category = category;
         }
 

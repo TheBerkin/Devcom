@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Devcom;
+using DeveloperCommands;
 
 namespace DCTest
 {
@@ -26,7 +26,7 @@ namespace DCTest
         [Command("add", "Adds two numbers. Because why not.")]
         public static void Add(DevcomContext context, float a, float b)
         {
-            DevcomEngine.Print(a + b);
+            Devcom.Print(a + b);
         }
     }
 }

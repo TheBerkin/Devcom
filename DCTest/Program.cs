@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Devcom;
+using DeveloperCommands;
 
 namespace DCTest
 {
@@ -12,13 +12,13 @@ namespace DCTest
         static void Main(string[] args)
         {
             Console.Title = "Devcom";
-            DevcomEngine.Load();
+            Devcom.Load();
             string cmdline;
             while(true)
             {
-                Console.Write(DevcomEngine.Prompt);
+                Console.Write(Devcom.Prompt);
                 cmdline = Console.ReadLine();
-                DevcomEngine.Input(null, cmdline);
+                Devcom.Input(null, cmdline);
             }
         }
     }

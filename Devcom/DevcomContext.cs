@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Devcom
+namespace DeveloperCommands
 {
     public class DevcomContext
     {
@@ -26,7 +26,12 @@ namespace Devcom
 
         public virtual void Post(string message)
         {
-            DevcomEngine.Print(message);
+            Devcom.Print(message);
+        }
+
+        public virtual void Post(object value)
+        {
+            Post(value.ToString());
         }
 
         public void PostFormat(string message, params object[] args)

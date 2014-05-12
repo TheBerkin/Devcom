@@ -7,7 +7,7 @@
     <ProjectGuid>{47601232-D1D9-4DDC-8277-F5CB72461D16}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Devcom</RootNamespace>
+    <RootNamespace>DeveloperCommands</RootNamespace>
     <AssemblyName>Devcom</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -41,10 +41,9 @@
   <ItemGroup>
     <Compile Include="CmdProvider.cs" />
     <Compile Include="CommandResult.cs" />
-    <Compile Include="ConvarAttribute.cs" />
     <Compile Include="DevcomCategoryAttribute.cs" />
     <Compile Include="DevcomContext.cs" />
-    <Compile Include="DevcomEngine.cs" />
+    <Compile Include="Devcom.cs" />
     <Compile Include="CommandDef.cs" />
     <Compile Include="CommandAttribute.cs" />
     <Compile Include="Extensions.cs" />
