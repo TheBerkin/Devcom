@@ -40,7 +40,7 @@ static void Main(string[] args)
 }
 ```
 
-When this program is built, Devcom will scan your assembly (as well as any libraries you use) for Devcom commands and register them.
+When this program is run, Devcom will scan your assembly (as well as any libraries you use) for Devcom commands and register them.
 
 Then, you can use your commands:
 ```
