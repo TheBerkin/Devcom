@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DeveloperCommands;
 
 namespace DCTest
@@ -13,12 +9,10 @@ namespace DCTest
         {
             Console.Title = "Devcom";
             Devcom.Load();
-            string cmdline;
             while(true)
             {
                 Console.Write(Devcom.Prompt);
-                cmdline = Console.ReadLine();
-                Devcom.SendCommand(null, cmdline);
+                Devcom.SendCommand(null, Console.ReadLine());
             }
         }
     }
