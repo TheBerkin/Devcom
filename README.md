@@ -12,7 +12,7 @@ using DeveloperCommands;
 namespace Example
 {
     [DevcomCategory]
-    public class Commands
+    public static class Commands
     {
         [Command("add", "Adds two numbers. Because why not.")]
         public static void Add(DevcomContext context, float a, float b)
