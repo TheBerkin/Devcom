@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace DeveloperCommands
 {
-    public class CommandDef
+    internal class CommandDef
     {
         private readonly string _name, _desc, _category;
         private readonly MethodInfo _method;

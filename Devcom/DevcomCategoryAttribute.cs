@@ -6,15 +6,25 @@ using System.Threading.Tasks;
 
 namespace DeveloperCommands
 {
+    /// <summary>
+    /// Specifies a category to assign to all commands within a class.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class DevcomCategoryAttribute : Attribute
     {
+        /// <summary>
+        /// The category name.
+        /// </summary>
         public string Category
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Creates a new DevcomCategory attribute.
+        /// </summary>
+        /// <param name="category">The category name.</param>
         public DevcomCategoryAttribute(string category)
         {
             if (category.Any(c => !Char.IsLetterOrDigit(c) && !"_-+".Contains(c)))
@@ -24,6 +34,9 @@ namespace DeveloperCommands
             Category = category;
         }
 
+        /// <summary>
+        /// Creates a new, empty DevcomCategory attribute.
+        /// </summary>
         public DevcomCategoryAttribute()
         {
             Category = "";

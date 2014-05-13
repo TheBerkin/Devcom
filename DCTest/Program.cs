@@ -18,7 +18,7 @@ namespace DCTest
             {
                 Console.Write(Devcom.Prompt);
                 cmdline = Console.ReadLine();
-                Devcom.Input(null, cmdline);
+                Devcom.SendCommand(null, cmdline);
             }
         }
     }

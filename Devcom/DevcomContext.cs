@@ -1,52 +1,102 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeveloperCommands
 {
+    /// <summary>
+    /// Represents a state object that is passed to all Devcom commands, and can be extended to customize command behavior and redirect output.
+    /// </summary>
     public class DevcomContext
     {
-        internal static List<string> ActiveContextList = new List<string>();
+        internal static Dictionary<string, DevcomContext> ActiveContextList = new Dictionary<string, DevcomContext>();
 
-        public static readonly DevcomContext Default = new DevcomContext("Default");
+        /// <summary>
+        /// The default context used by the Devcom engine.
+        /// </summary>
+        public static readonly DevcomContext Default = CreateDefaultContext();
 
         private readonly string _name;
+        private bool _disposed, _locked;
 
-        protected DevcomContext(string name)
+        /// <summary>
+        /// Creates a new DevcomContext with the specified name, and registers it.
+        /// </summary>
+        /// <param name="name">The name of the context.</param>
+        public DevcomContext(string name)
         {
-            if (ActiveContextList.Contains(name))
+            if (ActiveContextList.ContainsKey(name))
             {
                 throw new InvalidOperationException("A context with this name already exists.");
             }
             _name = name;
-            ActiveContextList.Add(name);
+            ActiveContextList[name] = this;
         }
 
+        /// <summary>
+        /// Searches for a context with the specified name.
+        /// If the context is found, it will be the return value.
+        /// If it is not found, the method will return null.
+        /// </summary>
+        /// <param name="name">The name of the context to search for (case-sensitive).</param>
+        /// <returns></returns>
+        public static DevcomContext GetContextByName(string name)
+        {
+            DevcomContext context;
+            return !ActiveContextList.TryGetValue(name, out context) ? null : context;
+        }
+
+        /// <summary>
+        /// Posts a string to the output of this context.
+        /// </summary>
+        /// <param name="message"></param>
         public virtual void Post(string message)
         {
             Devcom.Print(message);
         }
 
+        /// <summary>
+        /// Posts an object's string value to the output of this context.
+        /// </summary>
+        /// <param name="value"></param>
         public virtual void Post(object value)
         {
             Post(value.ToString());
         }
 
+        /// <summary>
+        /// Post a formatted string to the output of this context.
+        /// </summary>
+        /// <param name="message">The format string to pass.</param>
+        /// <param name="args">The arguments to insert into the format string.</param>
         public void PostFormat(string message, params object[] args)
         {
             Post(String.Format(message, args));
         }
 
+        /// <summary>
+        /// The name of this context.
+        /// </summary>
         public string Name
         {
             get { return _name; }
         }
 
-        public static DevcomContext CreateContext(string name)
+        internal static DevcomContext CreateDefaultContext()
         {
-            return new DevcomContext(name);
+            return new DevcomContext("default")
+            {
+                _locked = true
+            };
+        }
+
+        /// <summary>
+        /// Removes this context from the active context list.
+        /// </summary>
+        public void Unregister()
+        {
+            if (_disposed || _locked) return;
+            _disposed = true;
+            ActiveContextList.Remove(Name);
         }
     }
 }

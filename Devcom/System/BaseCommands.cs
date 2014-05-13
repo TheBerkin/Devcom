@@ -14,13 +14,13 @@ namespace DeveloperCommands
         public static void Cat(DevcomContext context, string category)
         {
             var cat = category.ToLower().Trim();
-            Devcom.CurrentCategory = cat == "$" ? "" : cat;
+            Devcom.Category = cat == "$" ? "" : cat;
         }
 
         [Command("root", "Returns the active category to the root.")]
         public static void Root(DevcomContext context)
         {
-            Devcom.CurrentCategory = "";
+            Devcom.Category = "";
         }
 
         [Command("echo", "Prints some text.")]
@@ -43,7 +43,7 @@ namespace DeveloperCommands
                     {
                         while (!reader.EndOfStream)
                         {
-                            Devcom.Input(context, reader.ReadLine().Trim());
+                            Devcom.SendCommand(context, reader.ReadLine().Trim());
                         }
                     }
                 }

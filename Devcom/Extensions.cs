@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DeveloperCommands
 {
-    public static class Extensions
+    internal static class Extensions
     {
         public static IEnumerable<string> ParseParams(this string str)
         {
