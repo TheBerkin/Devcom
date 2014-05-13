@@ -33,7 +33,7 @@ static void Main(string[] args)
     while(true)
     {
         Console.Write(Devcom.Prompt);
-        Devcom.SendCommand(null, Console.ReadLine(););
+        Devcom.SendCommand(null, Console.ReadLine());
     }
 }
 ```
