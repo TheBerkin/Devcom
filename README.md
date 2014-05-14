@@ -3,6 +3,23 @@ Devcom
 
 Devcom (short for Developer Commands) is a simple, extensible system for adding command-line interfaces to applications, games, and other interactive media running on the CLR.
 
+A simple Devcom command-line can be created with just a few lines of code:
+
+```cs
+static void Main(string[] args)
+{
+    Console.Title = "Devcom";
+    Devcom.Load();
+    while(true)
+    {
+        Console.Write(DevcomContext.Default.Prompt);
+        Devcom.SendCommand(Console.ReadLine());
+    }
+}
+```
+
+###Commands
+
 Defining new commands is a straightforward, easy process. Make a class marked with the `[DevcomCategory]` attribute. Then add static methods inside it with `[Command]` attributes that define what the commands are called.
 
 ```cs
@@ -23,21 +40,6 @@ namespace Example
 }
 ```
 
-A simple Devcom command-line can be created with just a few lines of code:
-
-```cs
-static void Main(string[] args)
-{
-    Console.Title = "Devcom";
-    Devcom.Load();
-    while(true)
-    {
-        Console.Write(DevcomContext.Default.Prompt);
-        Devcom.SendCommand(Console.ReadLine());
-    }
-}
-```
-
 When this program is run, Devcom will scan your assembly (as well as any libraries you use) for Devcom commands and register them.
 
 Then, you can use your commands:
@@ -45,6 +47,8 @@ Then, you can use your commands:
 devcom > add 12 18
 30
 ```
+
+###Convars
 
 Convars are just as easy to create in code. To make one, use the `[Convar]` attribute on any static property. Here's an example:
 
