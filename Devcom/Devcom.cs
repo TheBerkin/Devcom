@@ -33,11 +33,11 @@ namespace DeveloperCommands
         /// </summary>
         /// <param name="message">The format string to pass.</param>
         /// <param name="args">The arguments to insert into the format string.</param>
-        public static void Print(string message, params object[] args)
+        public static void PrintFormat(string message, params object[] args)
         {
             if (OnPrint != null)
             {
-                OnPrint(message, args);
+                OnPrint(String.Format(message, args));
             }
             else
             {
@@ -51,7 +51,14 @@ namespace DeveloperCommands
         /// <param name="value">The value to print.</param>
         public static void Print(object value)
         {
-            Print(value.ToString());
+            if (OnPrint != null)
+            {
+                OnPrint(value.ToString());
+            }
+            else
+            {
+                Console.WriteLine(value);
+            }
         }
 
         /// <summary>
@@ -142,7 +149,6 @@ namespace DeveloperCommands
     /// <summary>
     /// The callback type used by Devcom to route print messages.
     /// </summary>
-    /// <param name="message">The format string to pass.</param>
-    /// <param name="args">The arguments to insert in the format string.</param>
-    public delegate void PrintCallback(string message, object[] args);
+    /// <param name="message">The message to pass.</param>
+    public delegate void PrintCallback(string message);
 }

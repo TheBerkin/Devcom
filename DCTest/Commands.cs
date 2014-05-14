@@ -10,7 +10,11 @@ namespace DCTest
         public static void PrintColor(DevcomContext context, string colorName, params object[] message)
         {
             ConsoleColor color;
-            if (!Enum.TryParse(colorName, true, out color)) return;
+            if (!Enum.TryParse(colorName, true, out color))
+            {
+                color = ConsoleColor.Gray;
+            }
+            
             Console.ForegroundColor = color;
             foreach (object msg in message)
             {
@@ -24,7 +28,6 @@ namespace DCTest
         {
             Devcom.Print(a + b);
         }
-
 
         [Command("clear", "Clears the console.")]
         public static void Clear(DevcomContext context)
