@@ -45,3 +45,33 @@ Then, you can use your commands:
 devcom > add 12 18
 30
 ```
+
+Convars are just as easy to create in code. To make one, use the `[Convar]` attribute on any static property. Here's an example:
+
+```cs
+using System;
+using DeveloperCommands;
+
+namespace Example
+{
+    [DevcomCategory]
+    public static class MyConvars
+    {
+        [Convar("my_int")]
+        public static int MyInt
+        {
+            get;
+            set;
+        }
+    }
+}
+```
+
+Any convar's value can be inserted into a command by surrounding the name of the convar in curly brackets. Here is an example showing the `set` command to set the convar, and the `echo` command to display it:
+```
+devcom > echo "my_int = {my_int}"
+my_int = 0
+devcom > set my_int 123
+devcom > echo "my_int = {my_int}"
+my_int = 123
+```
