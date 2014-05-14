@@ -17,6 +17,7 @@ namespace DeveloperCommands
 
         private readonly string _name;
         private bool _disposed, _locked;
+        private string _cat;
 
         /// <summary>
         /// Creates a new DevcomContext with the specified name, and registers it.
@@ -24,11 +25,16 @@ namespace DeveloperCommands
         /// <param name="name">The name of the context.</param>
         public DevcomContext(string name)
         {
+            if (!Util.IsValidName(name))
+            {
+                throw new ArgumentException("Context names can only contain letters, numbers, underscores, dashes and plus symbols.");
+            }
             if (ActiveContextList.ContainsKey(name))
             {
                 throw new InvalidOperationException("A context with this name already exists.");
             }
             _name = name;
+            _cat = "";
             ActiveContextList[name] = this;
         }
 
@@ -81,9 +87,26 @@ namespace DeveloperCommands
             get { return _name; }
         }
 
+        /// <summary>
+        /// The current category.
+        /// </summary>
+        public string Category
+        {
+            get { return _cat; }
+            set { _cat = value; }
+        }
+
+        /// <summary>
+        /// The current prompt string.
+        /// </summary>
+        public string Prompt
+        {
+            get { return _name + (_cat.Length > 0 ? "." + _cat : "") + " > "; }
+        }
+
         internal static DevcomContext CreateDefaultContext()
         {
-            return new DevcomContext("default")
+            return new DevcomContext("devcom")
             {
                 _locked = true
             };

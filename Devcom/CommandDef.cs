@@ -9,7 +9,7 @@ namespace DeveloperCommands
 {
     internal class CommandDef
     {
-        private readonly string _name, _desc, _category;
+        private readonly string _name, _desc, _category, _paramHelpString;
         private readonly MethodInfo _method;
         private readonly ParameterInfo[] _paramList;
         private readonly bool _hasParamsArgument;
@@ -23,6 +23,11 @@ namespace DeveloperCommands
         public string Description
         {
             get { return _desc; }
+        }
+
+        public string ParamHelpString
+        {
+            get { return _paramHelpString; }
         }
 
         public string Category
@@ -59,6 +64,11 @@ namespace DeveloperCommands
             _name = name;
             _desc = desc;
             _category = category;
+            _paramHelpString = _paramList.Length > 1
+                ? _paramList.Where((p, i) => i > 0)
+                .Select(p => "<" + p.Name + (p.IsDefined(typeof(ParamArrayAttribute)) || p.IsOptional ? "(optional)>" : ">"))
+                .Aggregate((accum, pname) => accum + " " + pname)
+                : "";
         }
 
         public bool Run(DevcomContext context, params string[] args)
@@ -82,7 +92,7 @@ namespace DeveloperCommands
                 {
                     if (args.Length != paramc)
                     {
-                        context.Post("Parameter mismatch.");
+                        context.Post("Parameter count mismatch.");
                         return false;
                     }
                     boxed = new object[paramc];

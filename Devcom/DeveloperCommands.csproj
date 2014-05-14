@@ -40,7 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CmdProvider.cs" />
+    <Compile Include="Convar.cs" />
+    <Compile Include="ConvarAttribute.cs" />
+    <Compile Include="Scanner.cs" />
     <Compile Include="DevcomCategoryAttribute.cs" />
     <Compile Include="DevcomContext.cs" />
     <Compile Include="Devcom.cs" />
@@ -48,7 +50,8 @@
     <Compile Include="CommandAttribute.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="System\BaseCommands.cs" />
+    <Compile Include="System\SystemCommands.cs" />
+    <Compile Include="System\SystemConvars.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

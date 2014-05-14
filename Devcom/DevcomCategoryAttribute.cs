@@ -27,7 +27,7 @@ namespace DeveloperCommands
         /// <param name="category">The category name.</param>
         public DevcomCategoryAttribute(string category)
         {
-            if (category.Any(c => !Char.IsLetterOrDigit(c) && !"_-+".Contains(c)))
+            if (!Util.IsValidName(category, "_-"))
             {
                 throw new ArgumentException("Command categories can only contain letters, numbers, underscores, and dashes.");
             }

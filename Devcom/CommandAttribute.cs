@@ -37,7 +37,7 @@ namespace DeveloperCommands
         /// <param name="desc">The description for the command.</param>
         public CommandAttribute(string name, string desc = "")
         {
-            if (name.Any(c => !Char.IsLetterOrDigit(c) && !"_-+".Contains(c)))
+            if (!Util.IsValidName(name))
             {
                 throw new ArgumentException("Command names can only contain letters, numbers, underscores, dashes and plus symbols.");
             }

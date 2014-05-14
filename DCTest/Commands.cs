@@ -24,5 +24,18 @@ namespace DCTest
         {
             Devcom.Print(a + b);
         }
+
+
+        [Command("clear", "Clears the console.")]
+        public static void Clear(DevcomContext context)
+        {
+            Console.Clear();
+        }
+
+        [Command("quit", "Closes the application.")]
+        public static void Quit(DevcomContext context)
+        {
+            Environment.Exit(0);
+        }
     }
 }

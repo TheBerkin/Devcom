@@ -11,8 +11,8 @@ namespace DCTest
             Devcom.Load();
             while(true)
             {
-                Console.Write(Devcom.Prompt);
-                Devcom.SendCommand(null, Console.ReadLine());
+                Console.Write(DevcomContext.Default.Prompt);
+                Devcom.SendCommand(Console.ReadLine());
             }
         }
     }
