@@ -98,19 +98,18 @@ namespace DeveloperCommands
                     boxed = new object[paramc];
                 }
 
+                // Convert parameters to the proper types
                 for (int i = 0; i < argc; i++)
                 {
-                    float fl;
-                    if (_paramList[(i >= paramc ? paramc - 1 : i) + 1].ParameterType != typeof(string))
+                    var paramType = _paramList[(i >= paramc ? paramc - 1 : i) + 1].ParameterType;
+                    try
                     {
-                        if (float.TryParse(args[i], out fl))
-                        {
-                            boxed[i] = fl;
-                            continue;
-                        }
+                        boxed[i] = Convert.ChangeType(args[i], paramType);
                     }
-
-                    boxed[i] = args[i];                    
+                    catch
+                    {
+                        boxed[i] = null;
+                    }               
                 }
                 
                 var argsFormatted = new List<object>();
