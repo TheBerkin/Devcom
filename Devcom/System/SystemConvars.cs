@@ -18,7 +18,7 @@ namespace DeveloperCommands
         /// Determines if input sent to the Devcom engine should be echoed in the output before execution.
         /// Alias: echo_input
         /// </summary>
-        [Convar("echo_input", "A test boolean.")]
+        [Convar("echo_input", "Determines if input sent to the Devcom engine should be echoed in the output before execution.")]
         public static bool EchoInput
         {
             get { return _echoInput; }
