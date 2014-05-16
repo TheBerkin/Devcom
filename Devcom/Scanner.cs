@@ -25,25 +25,44 @@ namespace DeveloperCommands
             foreach(var cl in ass.GetTypes().Where(t => t.IsClass))           
             {
                 string cat = "";
+                ContextFilterInternal categoryFilter = null;
                 bool found = false;
-                foreach(var attr in cl.GetCustomAttributes<DevcomCategoryAttribute>())
+                foreach(var attr in cl.GetCustomAttributes())
                 {
-                    cat = attr.Category;
-                    found = true;
-                    break;
+                    var attrCat = attr as DevcomCategoryAttribute;
+                    var attrFilter = attr as ContextFilterAttribute;
+                    if (attrCat != null)
+                    {
+                        cat = attrCat.Category;
+                        found = true;
+                    }
+                    else if (attrFilter != null)
+                    {
+                        categoryFilter = attrFilter.CreateFilterInternal();
+                    }
                 }
 
                 if (!found) continue;
 
-                foreach (var command in cl.GetMethods()
-                    .Where(m => m.IsStatic && m.IsPublic)
-                    .SelectMany(method => method.GetCustomAttributes<CommandAttribute>()
-                        .Where(attr => !cmdlist.ContainsKey(Util.Qualify(cat, attr.Name)))
-                        .Select(attr => new CommandDef(method, attr.Name, attr.Description, cat))))
+                // Load commands
+                foreach (var method in cl.GetMethods().Where(m => m.IsStatic && m.IsPublic))
                 {
-                    cmdlist[command.QualifiedName.ToLower()] = command;
+                    var attrs = method.GetCustomAttributes();
+                    var attributes = attrs as Attribute[] ?? attrs.ToArray();
+                    var cmdAttr = attributes.FirstOrDefault(attr => attr is CommandAttribute) as CommandAttribute;
+
+                    if (cmdAttr == null) continue;
+                    if (cmdlist.ContainsKey(Util.Qualify(cat, cmdAttr.Name))) continue;
+
+                    var filterAttr = attributes.FirstOrDefault(attr => attr is ContextFilterAttribute) as ContextFilterAttribute;
+
+                    var command = new CommandDef(method, cmdAttr.Name, cmdAttr.Description, cat,
+                        categoryFilter ?? (filterAttr == null ? null : filterAttr.CreateFilterInternal()));
+
+                    cmdlist[command.QualifiedName] = command;
                 }
 
+                // Load convars
                 foreach (var convar in cl.GetProperties()
                             .Where(
                                 p => p.GetGetMethod().IsStatic && p.GetGetMethod().IsPublic && p.GetSetMethod().IsPublic)

@@ -40,6 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminContext.cs" />
+    <Compile Include="ContextFilterAttribute.cs" />
+    <Compile Include="ContextFilterInternal.cs" />
+    <Compile Include="ContextFilterType.cs" />
     <Compile Include="Convar.cs" />
     <Compile Include="ConvarAttribute.cs" />
     <Compile Include="Scanner.cs" />

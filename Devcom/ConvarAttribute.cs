@@ -28,6 +28,7 @@ namespace DeveloperCommands
         /// </summary>
         /// <param name="name">The name of the convar.</param>
         /// <param name="desc">The description of the convar.</param>
+        /// <param name="defaultValue">The default value of the convar.</param>
         public ConvarAttribute(string name, string desc = "", object defaultValue = null)
         {
             if (!Util.IsValidName(name, "-_"))

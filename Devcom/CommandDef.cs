@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reflection;
 
 namespace DeveloperCommands
@@ -14,6 +12,7 @@ namespace DeveloperCommands
         private readonly ParameterInfo[] _paramList;
         private readonly bool _hasParamsArgument;
         private readonly Type _contextType;
+        private readonly ContextFilterInternal _filter;
 
         public string Name
         {
@@ -40,9 +39,20 @@ namespace DeveloperCommands
             get { return Util.Qualify(_category, _name); }
         }
 
-        public CommandDef(MethodInfo method, string name, string desc, string category)
+        public ContextFilterInternal ContextFilter
+        {
+            get { return _filter; }
+        }
+
+        public Type ContextType
+        {
+            get { return _contextType; }
+        }
+
+        public CommandDef(MethodInfo method, string name, string desc, string category, ContextFilterInternal filter = null)
         {
             _method = method;
+            _filter = filter;
 
             var pl = _method.GetParameters();
             if (pl.Any())
@@ -51,19 +61,20 @@ namespace DeveloperCommands
                 var type = typeof (DevcomContext);
                 if (!_contextType.IsSubclassOf(type) && type != _contextType)
                 {
-                    throw new ArgumentException("Command creation failed: Method '" + method.Name + "' must have a DevcomContext as the first parameter.");
+                    throw new ArgumentException("Command creation failed: Method '" + method.Name + "' requires a DevcomContext as the first parameter.");
                 }
                 _hasParamsArgument = pl.Last().GetCustomAttribute<ParamArrayAttribute>() != null;
             }
             else
             {
-                throw new ArgumentException("Command creation failed: Method '" + method.Name + "' must have a DevcomContext as the first parameter.");
+                throw new ArgumentException("Command creation failed: Method '" + method.Name + "' requires a DevcomContext as the first parameter.");
             }
 
             _paramList = pl;
             _name = name;
             _desc = desc;
             _category = category;
+
             _paramHelpString = _paramList.Length > 1
                 ? _paramList.Where((p, i) => i > 0)
                 .Select(p => "<" + p.Name + (p.IsDefined(typeof(ParamArrayAttribute)) || p.IsOptional ? "(optional)>" : ">"))
@@ -74,11 +85,14 @@ namespace DeveloperCommands
         public bool Run(DevcomContext context, params string[] args)
         {
             var currentContextType = context.GetType();
-            if (!currentContextType.IsSubclassOf(_contextType) && currentContextType != _contextType)
+
+            // Check context type compatability
+            if ((!currentContextType.IsSubclassOf(_contextType) && currentContextType != _contextType) || !ContextFilterInternal.Test(currentContextType, _filter))
             {
-                context.PostFormat("This command requires a context of, or deriving from, type {0}.", _contextType);
+                context.PostCommandNotFound(QualifiedName);
                 return false;
             }
+
             int argc = args.Length;
             int paramc = _paramList.Length - 1;
             try
@@ -113,10 +127,13 @@ namespace DeveloperCommands
                 }
                 
                 var argsFormatted = new List<object>();
+
                 // Add our context
                 argsFormatted.Add(context);
+
                 // Add all arguments except for any marked as 'params'
                 argsFormatted.AddRange(boxed.Take(_hasParamsArgument ? paramc - 1 : paramc));
+
                 // Insert params argument as an array (it needs to be represented as a single object)
                 if (_hasParamsArgument)
                 {

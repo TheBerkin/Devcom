@@ -94,7 +94,7 @@ namespace DeveloperCommands
 
         public static string Qualify(string cat, string cmdName)
         {
-            return (cat.Length > 0 ? cat + "." : "") + cmdName;
+            return ((cat.Length > 0 ? cat + "." : "") + cmdName).ToLower();
         }
 
         public static bool IsValidName(string name, string otherChars = "_-+")

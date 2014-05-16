@@ -126,7 +126,7 @@ namespace DeveloperCommands
                 CommandDef cmd;
                 if (!Commands.TryGetValue(qname, out cmd))
                 {
-                    context.Post("Command not found: " + qname);
+                    context.PostCommandNotFound(qname);
                     continue;
                 }
 

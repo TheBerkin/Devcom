@@ -36,7 +36,6 @@ namespace DeveloperCommands
         /// </summary>
         /// <param name="name">The name of the command.</param>
         /// <param name="desc">The description for the command.</param>
-        /// <param name="defaultValue">The default value to initialize the convar with.</param>
         public CommandAttribute(string name, string desc = "")
         {
             if (!Util.IsValidName(name))

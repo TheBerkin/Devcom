@@ -9,10 +9,11 @@ namespace DCTest
         {
             Console.Title = "Devcom";
             Devcom.Load();
+            var context = DevcomContext.DefaultAdmin;
             while(true)
             {
-                Console.Write(DevcomContext.Default.Prompt);
-                Devcom.SendCommand(Console.ReadLine());
+                Console.Write(context.Prompt);
+                Devcom.SendCommand(context, Console.ReadLine());
             }
         }
     }

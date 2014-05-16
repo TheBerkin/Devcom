@@ -117,6 +117,7 @@ namespace DeveloperCommands
         /// <param name="value">The initial value of the convar.</param>
         /// <param name="cat">The category under which to put the convar.</param>
         /// <param name="desc">The description of the convar.</param>
+        /// <param name="defaultValue">The default value of the convar.</param>
         /// <returns></returns>
         public static Convar Register(string convarName, object value, string cat = "", string desc = "", object defaultValue = null)
         {

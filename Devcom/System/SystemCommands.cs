@@ -8,10 +8,15 @@ namespace DeveloperCommands
     [DevcomCategory]
     internal static class SystemCommands
     {
-        [Command("cat", "Changes the active category. Pass $ or an empty string to return to root.")]
+        [Command("cat", "Changes the active category. Pass $ to return to root.")]
         public static void Cat(DevcomContext context, string category)
         {
             var cat = category.ToLower().Trim();
+            if (cat == "")
+            {
+                context.Post("Current category: " + context.Category);
+                return;
+            }
             context.Category = cat == "$" ? "" : cat;
         }
 
@@ -31,7 +36,7 @@ namespace DeveloperCommands
         }
 
         [Command("exec", "Executes commands from one or more files.")]
-        public static void Exec(DevcomContext context, params string[] files)
+        public static void Exec(AdminContext context, params string[] files)
         {
             foreach (var path in files)
             {
@@ -41,6 +46,8 @@ namespace DeveloperCommands
                     {
                         while (!reader.EndOfStream)
                         {
+                            // ReSharper disable once PossibleNullReferenceException
+                            // ReadLine() should never be null since the loop breaks at EOF
                             Devcom.SendCommand(context, reader.ReadLine().Trim());
                         }
                     }
@@ -59,7 +66,7 @@ namespace DeveloperCommands
         }
 
         [Command("set", "Sets a convar.")]
-        public static void SetConVar(DevcomContext context, string cvName, object value)
+        public static void SetConVar(AdminContext context, string cvName, object value)
         {
             Convar convar;
             if (!context.RequestConvar(cvName, out convar)) return;
@@ -67,7 +74,7 @@ namespace DeveloperCommands
         }
 
         [Command("toggle", "Toggles a boolean-type convar.")]
-        public static void Toggle(DevcomContext context, string cvName)
+        public static void Toggle(AdminContext context, string cvName)
         {
             Convar convar;
             if (!context.RequestConvar(cvName, out convar)) return;
@@ -81,7 +88,7 @@ namespace DeveloperCommands
         }
 
         [Command("inc", "Adds 1 to the specified convar. Must be a number.")]
-        public static void Increment(DevcomContext context, string cvName)
+        public static void Increment(AdminContext context, string cvName)
         {
             Convar convar;
             if (!context.RequestConvar(cvName, out convar)) return;
@@ -96,7 +103,7 @@ namespace DeveloperCommands
         }
 
         [Command("dec", "Subtracts 1 from the specified convar. Must be a number.")]
-        public static void Decrement(DevcomContext context, string cvName)
+        public static void Decrement(AdminContext context, string cvName)
         {
             Convar convar;
             if (!context.RequestConvar(cvName, out convar)) return;
@@ -111,7 +118,7 @@ namespace DeveloperCommands
         }
 
         [Command("revert", "Sets a convar to its default value.")]
-        public static void ResetConvar(DevcomContext context, string cvName)
+        public static void ResetConvar(AdminContext context, string cvName)
         {
             Convar convar;
             if (!context.RequestConvar(cvName, out convar)) return;
@@ -121,7 +128,12 @@ namespace DeveloperCommands
         [Command("commands", "Displays a list of available commands.")]
         public static void ListCommands(DevcomContext context)
         {
-            context.Post(Devcom.Commands.Select(cmd => cmd.Key).Aggregate((accum, name) => accum + "\n" + name));
+            var contextType = context.GetType();
+            context.Post(
+                Devcom.Commands.Where(cmd => ContextFilterInternal.Test(contextType, cmd.Value.ContextFilter) && 
+                    (cmd.Value.ContextType == contextType || contextType.IsSubclassOf(cmd.Value.ContextType)))
+                .Select(cmd => cmd.Key)
+                .Aggregate((accum, name) => accum + "\n" + name));
         }
 
         [Command("help", "Displays the help text for a command.")]

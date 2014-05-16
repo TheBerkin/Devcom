@@ -11,7 +11,12 @@ namespace DeveloperCommands
         internal static Dictionary<string, DevcomContext> ActiveContextList = new Dictionary<string, DevcomContext>();
 
         /// <summary>
-        /// The default context used by the Devcom engine.
+        /// The default admin context used by the Devcom engine.
+        /// </summary>
+        public static readonly AdminContext DefaultAdmin = CreateDefaultAdminContext();
+
+        /// <summary>
+        /// The default base context used by the Devcom engine.
         /// </summary>
         public static readonly DevcomContext Default = CreateDefaultContext();
 
@@ -93,6 +98,11 @@ namespace DeveloperCommands
             return false;
         }
 
+        internal void PostCommandNotFound(string commandName)
+        {
+            Post("Command not found: '" + commandName + "'");
+        }
+
         /// <summary>
         /// The name of this context.
         /// </summary>
@@ -116,6 +126,14 @@ namespace DeveloperCommands
         public string Prompt
         {
             get { return _name + (_cat.Length > 0 ? "." + _cat : "") + " > "; }
+        }
+
+        internal static AdminContext CreateDefaultAdminContext()
+        {
+            return new AdminContext("devcom")
+            {
+                _locked = true
+            };
         }
 
         internal static DevcomContext CreateDefaultContext()
