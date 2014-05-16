@@ -24,7 +24,7 @@ namespace DeveloperCommands
         [Command("echo", "Prints some text.")]
         public static void Echo(DevcomContext context, params object[] message)
         {
-            foreach (object msg in message)
+            foreach (var msg in message)
             {
                 context.Post(msg);
             }
@@ -33,7 +33,7 @@ namespace DeveloperCommands
         [Command("exec", "Executes commands from one or more files.")]
         public static void Exec(DevcomContext context, params string[] files)
         {
-            foreach (string path in files)
+            foreach (var path in files)
             {
                 try
                 {
@@ -62,12 +62,60 @@ namespace DeveloperCommands
         public static void SetConVar(DevcomContext context, string cvName, object value)
         {
             Convar convar;
-            if (!Devcom.Convars.TryGetValue(Util.Qualify(context.Category, cvName), out convar))
+            if (!context.RequestConvar(cvName, out convar)) return;
+            convar.Value = value;
+        }
+
+        [Command("toggle", "Toggles a boolean-type convar.")]
+        public static void Toggle(DevcomContext context, string cvName)
+        {
+            Convar convar;
+            if (!context.RequestConvar(cvName, out convar)) return;
+
+            if (convar.Value.GetType() != typeof(bool))
             {
-                context.Post("Convar '" + cvName + "' not found.");
+                context.Post("Convar '" + cvName + "' is not a boolean type.");
                 return;
             }
-            convar.Value = value;
+            convar.Value = !((bool)convar.Value);
+        }
+
+        [Command("inc", "Adds 1 to the specified convar. Must be a number.")]
+        public static void Increment(DevcomContext context, string cvName)
+        {
+            Convar convar;
+            if (!context.RequestConvar(cvName, out convar)) return;
+
+            var o = convar.Value;
+            if (!Util.Increment(ref o))
+            {
+                context.Post("Convar '" + cvName + "' is not a numeric type.");
+                return;
+            }
+            convar.Value = o;
+        }
+
+        [Command("dec", "Subtracts 1 from the specified convar. Must be a number.")]
+        public static void Decrement(DevcomContext context, string cvName)
+        {
+            Convar convar;
+            if (!context.RequestConvar(cvName, out convar)) return;
+
+            var o = convar.Value;
+            if (!Util.Decrement(ref o))
+            {
+                context.Post("Convar '" + cvName + "' is not a numeric type.");
+                return;
+            }
+            convar.Value = o;
+        }
+
+        [Command("revert", "Sets a convar to its default value.")]
+        public static void ResetConvar(DevcomContext context, string cvName)
+        {
+            Convar convar;
+            if (!context.RequestConvar(cvName, out convar)) return;
+            convar.Value = convar.DefaultValue;
         }
 
         [Command("commands", "Displays a list of available commands.")]

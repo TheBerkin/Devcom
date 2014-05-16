@@ -16,7 +16,7 @@ namespace DCTest
             }
             
             Console.ForegroundColor = color;
-            foreach (object msg in message)
+            foreach (var msg in message)
             {
                 Console.WriteLine(msg);
             }

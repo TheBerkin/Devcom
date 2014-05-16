@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeveloperCommands
 {
@@ -14,10 +10,11 @@ namespace DeveloperCommands
     {
         private readonly string _name, _desc, _cat;
         private readonly PropertyInfo _property;
-        private object _valueObject;
+        private object _valueObject, _defaultValue;
 
-        internal Convar(PropertyInfo property, string name, string desc, string cat)
+        internal Convar(PropertyInfo property, string name, string desc, string cat, object defaultValue)
         {
+            _defaultValue = defaultValue;
             if (property != null)
             {
                 if (!property.GetGetMethod().IsStatic)
@@ -25,11 +22,15 @@ namespace DeveloperCommands
                     throw new ArgumentException("Convar creation failed: The property '" + property.Name + "' is not static.");
                 }
                 _property = property;
+                if (defaultValue != null)
+                {
+                    _property.SetValue(null, defaultValue);
+                }
             }
             else
             {
                 _property = null;
-                _valueObject = null;
+                _valueObject = defaultValue;
             }
             _name = name;
             _desc = desc;
@@ -69,6 +70,14 @@ namespace DeveloperCommands
         }
 
         /// <summary>
+        /// The default value of the convar.
+        /// </summary>
+        public object DefaultValue
+        {
+            get { return _defaultValue; }
+        }
+
+        /// <summary>
         /// The value of the convar.
         /// </summary>
         public object Value
@@ -79,7 +88,11 @@ namespace DeveloperCommands
             }
             set
             {
-                if (_property == null)
+                if (value == null)
+                {
+                    _valueObject = null;
+                }
+                else if (_property == null)
                 {
                     _valueObject = value;
                 }
@@ -105,14 +118,14 @@ namespace DeveloperCommands
         /// <param name="cat">The category under which to put the convar.</param>
         /// <param name="desc">The description of the convar.</param>
         /// <returns></returns>
-        public static Convar Register(string convarName, object value, string cat = "", string desc = "")
+        public static Convar Register(string convarName, object value, string cat = "", string desc = "", object defaultValue = null)
         {
             Convar convar;
             if (Devcom.Convars.TryGetValue(Util.Qualify(cat, convarName), out convar))
             {
                 return convar;
             }
-            convar = new Convar(null, convarName, desc, cat);
+            convar = new Convar(null, convarName, desc, cat, defaultValue);
             convar.Value = value;
             return convar;
         }

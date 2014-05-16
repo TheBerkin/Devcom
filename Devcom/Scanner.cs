@@ -1,9 +1,6 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Reflection;
 
 namespace DeveloperCommands
@@ -52,7 +49,7 @@ namespace DeveloperCommands
                                 p => p.GetGetMethod().IsStatic && p.GetGetMethod().IsPublic && p.GetSetMethod().IsPublic)
                             .SelectMany(p => p.GetCustomAttributes<ConvarAttribute>()
                                 .Where(attr => !convars.ContainsKey(Util.Qualify(cat, attr.Name)))
-                                .Select(attr => new Convar(p, attr.Name, attr.Description, cat))))
+                                .Select(attr => new Convar(p, attr.Name, attr.Description, cat, attr.DefaultValue))))
                 {
                     convars[convar.QualifiedName.ToLower()] = convar;
                 }

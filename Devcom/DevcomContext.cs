@@ -80,6 +80,20 @@ namespace DeveloperCommands
         }
 
         /// <summary>
+        /// Searches for a convar with the specified name and sends it to the 'convar' output parameter.
+        /// If not found, a notification will be sent to the context.
+        /// </summary>
+        /// <param name="cvName">The name of the convar.</param>
+        /// <param name="convar">The Convar object to send the result to.</param>
+        /// <returns></returns>
+        public bool RequestConvar(string cvName, out Convar convar)
+        {
+            if (Devcom.Convars.TryGetValue(Util.Qualify(Category, cvName), out convar)) return true;
+            Post("Convar '" + cvName + "' not found.");
+            return false;
+        }
+
+        /// <summary>
         /// The name of this context.
         /// </summary>
         public string Name

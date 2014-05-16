@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DeveloperCommands
 {
@@ -93,7 +94,7 @@ namespace DeveloperCommands
             // Cut off spaces from both ends
             command = command.Trim();
 
-            foreach (string cmdstr in command.Split(new[] { '|', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+            foreach (var cmdstr in command.Split(new[] { '|', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(s => s.Trim()))
             {
                 // Split up the line into arguments
@@ -143,6 +144,25 @@ namespace DeveloperCommands
                 // Run the command
                 cmd.Run(context, parts.Where((s, i) => i > 0).ToArray());
             }
+        }
+
+        /// <summary>
+        /// Executes a command string asynchronously under the default context.
+        /// </summary>
+        /// <param name="command">The command to execute.</param>
+        public static async void SendCommndAsync(string command)
+        {
+            await Task.Run(() => SendCommand(DevcomContext.Default, command));
+        }
+
+        /// <summary>
+        /// Executes a command string asynchronously under the specified context.
+        /// </summary>
+        /// <param name="context">The context under which to execute the command.</param>
+        /// <param name="command">The command to execute.</param>
+        public static async void SendCommandAsync(DevcomContext context, string command)
+        {
+            await Task.Run(() => SendCommand(context, command));
         }
     }
 
