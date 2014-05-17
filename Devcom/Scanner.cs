@@ -20,7 +20,7 @@ namespace DeveloperCommands
             }
         }
 
-        private static void SearchAssembly(Assembly ass, Dictionary<string, CommandDef> cmdlist, Dictionary<string, Convar> convars)
+        public static void SearchAssembly(Assembly ass, Dictionary<string, CommandDef> cmdlist, Dictionary<string, Convar> convars)
         {
             foreach(var cl in ass.GetTypes().Where(t => t.IsClass))           
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace DeveloperCommands
@@ -20,12 +21,29 @@ namespace DeveloperCommands
         private static bool _loaded;
 
         /// <summary>
-        /// Scans all loaded assemblies for commands and registers them.
+        /// Scans all assemblies in the current application domain, and their references, for command/convar definitions.
         /// </summary>
+        /// <param name="loadConfig">Indicates if the engine should load a configuration file.</param>
         public static void Load(bool loadConfig = true)
         {
             if (_loaded) return;
             Scanner.FindAllDefs(Commands, Convars);
+            if (loadConfig) ConvarConfig.Load();
+            _loaded = true;
+        }
+
+        /// <summary>
+        /// Scans the specified assemblies for command/convar definitions.
+        /// </summary>
+        /// <param name="loadConfig">Indicates if the engine should load a configuration file.</param>
+        /// <param name="definitionAssemblies">The assemblies to search.</param>
+        public static void Load(bool loadConfig, params Assembly[] definitionAssemblies)
+        {
+            if (_loaded) return;
+            foreach (var ass in definitionAssemblies)
+            {
+                Scanner.SearchAssembly(ass, Commands, Convars);
+            }
             if (loadConfig) ConvarConfig.Load();
             _loaded = true;
         }

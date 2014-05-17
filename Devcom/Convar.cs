@@ -10,7 +10,8 @@ namespace DeveloperCommands
     {
         private readonly string _name, _desc, _cat;
         private readonly PropertyInfo _property;
-        private object _valueObject, _defaultValue;
+        private object _valueObject;
+        private readonly object _defaultValue;
 
         internal Convar(PropertyInfo property, string name, string desc, string cat, object defaultValue)
         {
