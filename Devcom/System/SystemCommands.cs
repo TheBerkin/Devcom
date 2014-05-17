@@ -35,6 +35,12 @@ namespace DeveloperCommands
             }
         }
 
+        [Command("save_cfg", "Saves the engine configuration to " + ConvarConfig.ConfigFile + ".")]
+        public static void SaveConfig(AdminContext context)
+        {
+            ConvarConfig.Save();
+        }
+
         [Command("exec", "Executes commands from one or more files.")]
         public static void Exec(AdminContext context, params string[] files)
         {

@@ -22,10 +22,11 @@ namespace DeveloperCommands
         /// <summary>
         /// Scans all loaded assemblies for commands and registers them.
         /// </summary>
-        public static void Load()
+        public static void Load(bool loadConfig = true)
         {
             if (_loaded) return;
             Scanner.FindAllDefs(Commands, Convars);
+            if (loadConfig) ConvarConfig.Load();
             _loaded = true;
         }
 
@@ -163,6 +164,14 @@ namespace DeveloperCommands
         public static async void SendCommandAsync(DevcomContext context, string command)
         {
             await Task.Run(() => SendCommand(context, command));
+        }
+
+        /// <summary>
+        /// Saves the current configuration of the engine.
+        /// </summary>
+        public static void SaveConfig()
+        {
+            ConvarConfig.Save();
         }
     }
 

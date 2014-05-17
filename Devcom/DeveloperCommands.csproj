@@ -46,6 +46,7 @@
     <Compile Include="ContextFilterType.cs" />
     <Compile Include="Convar.cs" />
     <Compile Include="ConvarAttribute.cs" />
+    <Compile Include="ConvarConfig.cs" />
     <Compile Include="Scanner.cs" />
     <Compile Include="DevcomCategoryAttribute.cs" />
     <Compile Include="DevcomContext.cs" />
