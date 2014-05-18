@@ -27,7 +27,7 @@ namespace DeveloperCommands
         {
             if (contextTypes != null)
             {
-                var baseType = typeof (DevcomContext);
+                var baseType = typeof (Context);
                 if (contextTypes.Any(t => t != baseType && !t.IsSubclassOf(baseType)))
                 {
                     throw new ArgumentException("Attempted to specify a non-context type in a context filter.");

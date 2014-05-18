@@ -1,51 +1,53 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace DeveloperCommands
 {
-    internal static class ConvarConfig
+    /// <summary>
+    /// Provides methods for saving and loading convars from configuration files.
+    /// </summary>
+    public static class ConvarConfig
     {
-        public const string ConfigFile = "devcom.cfg";
+        public const string DefaultConfigFile = "devcom.cfg";
 
-        public static void Save()
+        public static void SaveConvars(string path = DefaultConfigFile)
         {
             try
             {
-                using (var writer = new StreamWriter(ConfigFile))
+                using (var writer = new StreamWriter(path))
                 {
-                    bool diff = true;
-                    Convar prev = null;
+                    string prev = "";
                     foreach (var convar in Devcom.Convars.OrderBy(kvp => kvp.Key))
                     {
-                        if (prev == null || diff)
+                        if (prev != "" && convar.Value.Category != prev)
                         {
-                            diff = false;
-                            if (convar.Value.Category.Length > 0) writer.Write("# " + convar.Value.Category);
+                            writer.Write("#   -- " + convar.Value.Category + " --");
                         }
-                        prev = convar.Value;
+                        prev = convar.Value.Category;
                         writer.Write("{0}={1}\r\n", convar.Key, convar.Value.Value);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Devcom.Print("Failed to save configuration: '" + ex.Message + "'");
+                Devcom.Print("Failed to save "+path+": '" + ex.Message + "'");
             }
         }
 
-        public static void Load()
+        public static void LoadConvars(string path = DefaultConfigFile)
         {
-            if (!File.Exists(ConfigFile))
+            if (!File.Exists(DefaultConfigFile))
             {
-                Devcom.Print("Couldn't find " + ConfigFile + ".");
+                Devcom.Print("Couldn't find " + path + ".");
                 return;
             }
 
             try
             {
-                using (var reader = new StreamReader(ConfigFile))
+                using (var reader = new StreamReader(path))
                 {
                     while (!reader.EndOfStream)
                     {
@@ -63,7 +65,7 @@ namespace DeveloperCommands
             }
             catch (Exception ex)
             {
-                Devcom.Print("Failed to load " + ConfigFile + ": '" + ex.Message + "'");
+                Devcom.Print("Failed to load " + path + ": '" + ex.Message + "'");
             }
         }
     }

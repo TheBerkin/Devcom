@@ -6,9 +6,9 @@ namespace DeveloperCommands
     /// <summary>
     /// Represents a state object that is passed to all Devcom commands, and can be extended to customize command behavior and redirect output.
     /// </summary>
-    public class DevcomContext
+    public class Context
     {
-        internal static Dictionary<string, DevcomContext> ActiveContextList = new Dictionary<string, DevcomContext>();
+        internal static Dictionary<string, Context> ActiveContextList = new Dictionary<string, Context>();
 
         /// <summary>
         /// The default admin context used by the Devcom engine.
@@ -18,7 +18,7 @@ namespace DeveloperCommands
         /// <summary>
         /// The default base context used by the Devcom engine.
         /// </summary>
-        public static readonly DevcomContext Default = CreateDefaultContext();
+        public static readonly Context Default = CreateDefaultContext();
 
         private readonly string _name;
         private bool _disposed, _locked;
@@ -28,7 +28,7 @@ namespace DeveloperCommands
         /// Creates a new DevcomContext with the specified name, and registers it.
         /// </summary>
         /// <param name="name">The name of the context.</param>
-        public DevcomContext(string name)
+        public Context(string name)
         {
             if (!Util.IsValidName(name))
             {
@@ -50,9 +50,9 @@ namespace DeveloperCommands
         /// </summary>
         /// <param name="name">The name of the context to search for (case-sensitive).</param>
         /// <returns></returns>
-        public static DevcomContext GetContextByName(string name)
+        public static Context GetContextByName(string name)
         {
-            DevcomContext context;
+            Context context;
             return !ActiveContextList.TryGetValue(name, out context) ? null : context;
         }
 
@@ -136,9 +136,9 @@ namespace DeveloperCommands
             };
         }
 
-        internal static DevcomContext CreateDefaultContext()
+        internal static Context CreateDefaultContext()
         {
-            return new DevcomContext("devcom")
+            return new Context("devcom")
             {
                 _locked = true
             };

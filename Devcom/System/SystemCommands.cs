@@ -9,7 +9,7 @@ namespace DeveloperCommands
     internal static class SystemCommands
     {
         [Command("cat", "Changes the active category. Pass $ to return to root.")]
-        public static void Cat(DevcomContext context, string category)
+        public static void Cat(Context context, string category)
         {
             var cat = category.ToLower().Trim();
             if (cat == "")
@@ -21,13 +21,13 @@ namespace DeveloperCommands
         }
 
         [Command("root", "Returns the active category to the root.")]
-        public static void Root(DevcomContext context)
+        public static void Root(Context context)
         {
             context.Category = "";
         }
 
         [Command("echo", "Prints some text.")]
-        public static void Echo(DevcomContext context, params object[] message)
+        public static void Echo(Context context, params object[] message)
         {
             foreach (var msg in message)
             {
@@ -35,10 +35,16 @@ namespace DeveloperCommands
             }
         }
 
-        [Command("save_cfg", "Saves the engine configuration to " + ConvarConfig.ConfigFile + ".")]
+        [Command("cfg_save", "Saves the engine configuration to " + ConvarConfig.DefaultConfigFile + ".")]
         public static void SaveConfig(AdminContext context)
         {
-            ConvarConfig.Save();
+            ConvarConfig.SaveConvars();
+        }
+
+        [Command("cfg_load", "Loads the engine configuration from " + ConvarConfig.DefaultConfigFile + ".")]
+        public static void LoadConfig(AdminContext context)
+        {
+            ConvarConfig.LoadConvars();
         }
 
         [Command("exec", "Executes commands from one or more files.")]
@@ -66,7 +72,7 @@ namespace DeveloperCommands
         }
 
         [Command("date", "Displays the current date.")]
-        public static void Date(DevcomContext context)
+        public static void Date(Context context)
         {
             context.Post(DateTime.Now.ToString("R"));
         }
@@ -132,7 +138,7 @@ namespace DeveloperCommands
         }
 
         [Command("commands", "Displays a list of available commands.")]
-        public static void ListCommands(DevcomContext context)
+        public static void ListCommands(Context context)
         {
             var contextType = context.GetType();
             context.Post(
@@ -143,7 +149,7 @@ namespace DeveloperCommands
         }
 
         [Command("help", "Displays the help text for a command.")]
-        public static void Help(DevcomContext context, string command)
+        public static void Help(Context context, string command)
         {
             command = command.ToLower();
             CommandDef cmd;

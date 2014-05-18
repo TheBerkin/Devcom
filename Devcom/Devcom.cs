@@ -28,7 +28,7 @@ namespace DeveloperCommands
         {
             if (_loaded) return;
             Scanner.FindAllDefs(Commands, Convars);
-            if (loadConfig) ConvarConfig.Load();
+            if (loadConfig) ConvarConfig.LoadConvars();
             _loaded = true;
         }
 
@@ -44,7 +44,7 @@ namespace DeveloperCommands
             {
                 Scanner.SearchAssembly(ass, Commands, Convars);
             }
-            if (loadConfig) ConvarConfig.Load();
+            if (loadConfig) ConvarConfig.LoadConvars();
             _loaded = true;
         }
 
@@ -87,7 +87,7 @@ namespace DeveloperCommands
         /// <param name="command">The command to execute.</param>
         public static void SendCommand(string command)
         {
-            SendCommand(DevcomContext.Default, command);
+            SendCommand(Context.Default, command);
         }
 
         /// <summary>
@@ -95,12 +95,12 @@ namespace DeveloperCommands
         /// </summary>
         /// <param name="context">The context under which to execute the command.</param>
         /// <param name="command">The command to execute.</param>
-        public static void SendCommand(DevcomContext context, string command)
+        public static void SendCommand(Context context, string command)
         {
             if (!_loaded) return;
 
             // Set the context to default if null was passed
-            context = context ?? DevcomContext.Default;
+            context = context ?? Context.Default;
 
             if (SystemConvars.EchoInput)
             {
@@ -171,7 +171,7 @@ namespace DeveloperCommands
         /// <param name="command">The command to execute.</param>
         public static async void SendCommndAsync(string command)
         {
-            await Task.Run(() => SendCommand(DevcomContext.Default, command));
+            await Task.Run(() => SendCommand(Context.Default, command));
         }
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace DeveloperCommands
         /// </summary>
         /// <param name="context">The context under which to execute the command.</param>
         /// <param name="command">The command to execute.</param>
-        public static async void SendCommandAsync(DevcomContext context, string command)
+        public static async void SendCommandAsync(Context context, string command)
         {
             await Task.Run(() => SendCommand(context, command));
         }
@@ -189,7 +189,7 @@ namespace DeveloperCommands
         /// </summary>
         public static void SaveConfig()
         {
-            ConvarConfig.Save();
+            ConvarConfig.SaveConvars();
         }
     }
 

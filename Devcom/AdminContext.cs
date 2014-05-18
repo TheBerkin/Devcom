@@ -3,7 +3,7 @@
     /// <summary>
     /// The base context type for accessing system commands.
     /// </summary>
-    public class AdminContext : DevcomContext
+    public class AdminContext : Context
     {
         /// <summary>
         /// Creates a new AdminContext with the specified name.

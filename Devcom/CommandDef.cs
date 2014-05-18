@@ -58,7 +58,7 @@ namespace DeveloperCommands
             if (pl.Any())
             {
                 _contextType = pl[0].ParameterType;
-                var type = typeof (DevcomContext);
+                var type = typeof (Context);
                 if (!_contextType.IsSubclassOf(type) && type != _contextType)
                 {
                     throw new ArgumentException("Command creation failed: Method '" + method.Name + "' requires a DevcomContext as the first parameter.");
@@ -82,7 +82,7 @@ namespace DeveloperCommands
                 : "";
         }
 
-        public bool Run(DevcomContext context, params string[] args)
+        public bool Run(Context context, params string[] args)
         {
             var currentContextType = context.GetType();
 
@@ -126,10 +126,7 @@ namespace DeveloperCommands
                     }               
                 }
                 
-                var argsFormatted = new List<object>();
-
-                // Add our context
-                argsFormatted.Add(context);
+                var argsFormatted = new List<object> { context };
 
                 // Add all arguments except for any marked as 'params'
                 argsFormatted.AddRange(boxed.Take(_hasParamsArgument ? paramc - 1 : paramc));
