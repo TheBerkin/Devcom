@@ -51,10 +51,10 @@
     <Compile Include="ObjectConvar.cs" />
     <Compile Include="PropertyConvar.cs" />
     <Compile Include="Scanner.cs" />
-    <Compile Include="DevcomCategoryAttribute.cs" />
+    <Compile Include="CategoryAttribute.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="Devcom.cs" />
-    <Compile Include="CommandDef.cs" />
+    <Compile Include="Command.cs" />
     <Compile Include="CommandAttribute.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

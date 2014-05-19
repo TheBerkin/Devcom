@@ -152,7 +152,7 @@ namespace DeveloperCommands
         public static void Help(Context context, string command)
         {
             command = command.ToLower();
-            CommandDef cmd;
+            Command cmd;
             if (!Devcom.Commands.TryGetValue(Util.Qualify(context.Category, command), out cmd))
             {
                 context.Post("Command not found: '" + command + "'");

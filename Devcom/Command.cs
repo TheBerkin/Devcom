@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace DeveloperCommands
 {
-    internal class CommandDef
+    internal class Command
     {
         private readonly string _name, _desc, _category, _paramHelpString;
         private readonly MethodInfo _method;
@@ -49,7 +49,7 @@ namespace DeveloperCommands
             get { return _contextType; }
         }
 
-        public CommandDef(MethodInfo method, string name, string desc, string category, ContextFilterInternal filter = null)
+        public Command(MethodInfo method, string name, string desc, string category, ContextFilterInternal filter = null)
         {
             _method = method;
             _filter = filter;

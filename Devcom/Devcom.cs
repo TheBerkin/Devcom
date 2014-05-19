@@ -16,8 +16,9 @@ namespace DeveloperCommands
         /// </summary>
         public static PrintCallback OnPrint;
 
-        internal static readonly Dictionary<string, CommandDef> Commands = new Dictionary<string, CommandDef>();
+        internal static readonly Dictionary<string, Command> Commands = new Dictionary<string, Command>();
         internal static readonly Dictionary<string, Convar> Convars = new Dictionary<string, Convar>(); 
+
         private static bool _loaded;
 
         internal const string CopyrightString = "Powered by Devcom v1.2 - Copyright (c) 2014 Nicholas Fleck";
@@ -146,7 +147,7 @@ namespace DeveloperCommands
                 string qname = root ? first : (context.Category.Length > 0 ? context.Category + "." : "") + first;
 
                 // Make sure the command exists
-                CommandDef cmd;
+                Command cmd;
                 if (!Commands.TryGetValue(qname, out cmd))
                 {
                     context.PostCommandNotFound(qname);
@@ -186,6 +187,33 @@ namespace DeveloperCommands
         public static async void SendCommandAsync(Context context, string command)
         {
             await Task.Run(() => SendCommand(context, command));
+        }
+
+        /// <summary>
+        /// Searches for commands containing the specified substring and returns a collection of matching command outlines.
+        /// </summary>
+        /// <param name="query">The query to search for.</param>
+        /// <param name="beginsWith">Indicates if the search should only return results that begin with the query.</param>
+        /// <returns></returns>
+        public static IEnumerable<string> SearchCommands(string query, bool beginsWith = true)
+        {
+            query = query.ToLower();
+            return
+                Commands.Where(pair => beginsWith ? pair.Key.StartsWith(query) : pair.Key.Contains(query))
+                    .Select(pair => pair.Value.ParamHelpString);
+        }
+
+        /// <summary>
+        /// Searches for convars containing the specified substring and returns a collection of matches.
+        /// </summary>
+        /// <param name="query">The query to search for.</param>
+        /// <param name="beginsWith">Indicates if the search should only return results that begin with the query.</param>
+        /// <returns></returns>
+        public static IEnumerable<Convar> SearchConvars(string query, bool beginsWith = true)
+        {
+            query = query.ToLower();
+            return Convars.Where(pair => beginsWith ? pair.Key.StartsWith(query) : pair.Key.Contains(query))
+                .Select(pair => pair.Value);
         }
 
         /// <summary>

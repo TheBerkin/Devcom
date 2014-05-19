@@ -8,7 +8,7 @@ namespace DeveloperCommands
 {
     internal static class Scanner
     {
-        public static void FindAllDefs(Dictionary<string, CommandDef> commands, Dictionary<string, Convar> convars)
+        public static void FindAllDefs(Dictionary<string, Command> commands, Dictionary<string, Convar> convars)
         {
             SearchAssembly(Assembly.GetExecutingAssembly(), commands, convars);
             foreach(var asm in AppDomain.CurrentDomain.GetAssemblies())
@@ -21,7 +21,7 @@ namespace DeveloperCommands
             }
         }
 
-        public static void SearchAssembly(Assembly ass, Dictionary<string, CommandDef> cmdlist, Dictionary<string, Convar> convars)
+        public static void SearchAssembly(Assembly ass, Dictionary<string, Command> cmdlist, Dictionary<string, Convar> convars)
         {
             foreach(var cl in ass.GetTypes().Where(t => t.IsClass))           
             {
@@ -57,7 +57,7 @@ namespace DeveloperCommands
 
                     var filterAttr = attributes.FirstOrDefault(attr => attr is ContextFilterAttribute) as ContextFilterAttribute;
 
-                    var command = new CommandDef(method, cmdAttr.Name, cmdAttr.Description, cat,
+                    var command = new Command(method, cmdAttr.Name, cmdAttr.Description, cat,
                         categoryFilter ?? (filterAttr == null ? null : filterAttr.CreateFilterInternal()));
 
                     cmdlist[command.QualifiedName] = command;
