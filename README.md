@@ -28,7 +28,7 @@ using DeveloperCommands;
 
 namespace Example
 {
-    [DevcomCategory]
+    [Category]
     public static class Commands
     {
         [Command("add", "Adds two numbers. Because why not.")]
@@ -58,7 +58,7 @@ using DeveloperCommands;
 
 namespace Example
 {
-    [DevcomCategory]
+    [Category("example")]
     public static class MyConvars
     {
         [Convar("my_int")]
@@ -73,9 +73,9 @@ namespace Example
 
 Any convar's value can be inserted into a command by surrounding the name of the convar in curly brackets. Here is an example showing the `set` command to set the convar, and the `echo` command to display it:
 ```
-devcom > echo "my_int = {my_int}"
-my_int = 0
-devcom > set my_int 123
-devcom > echo "my_int = {my_int}"
-my_int = 123
+devcom > echo "MyInt = {example.my_int}"
+MyInt = 0
+devcom > set example.my_int 123
+devcom > echo "MyInt = {example.my_int}"
+MyInt = 123
 ```
