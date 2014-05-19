@@ -35,20 +35,23 @@ namespace DeveloperCommands
             }
         }
 
+        [DefaultAdminFilter]
         [Command("cfg_save", "Saves the engine configuration to " + ConvarConfig.DefaultConfigFile + ".")]
-        public static void SaveConfig(AdminContext context)
+        public static void SaveConfig(Context context)
         {
             ConvarConfig.SaveConvars();
         }
 
+        [DefaultAdminFilter]
         [Command("cfg_load", "Loads the engine configuration from " + ConvarConfig.DefaultConfigFile + ".")]
-        public static void LoadConfig(AdminContext context)
+        public static void LoadConfig(Context context)
         {
             ConvarConfig.LoadConvars();
         }
 
+        [DefaultAdminFilter]
         [Command("exec", "Executes commands from one or more files.")]
-        public static void Exec(AdminContext context, params string[] files)
+        public static void Exec(Context context, params string[] files)
         {
             foreach (var path in files)
             {
@@ -77,16 +80,18 @@ namespace DeveloperCommands
             context.Post(DateTime.Now.ToString("R"));
         }
 
+        [DefaultAdminFilter]
         [Command("set", "Sets a convar.")]
-        public static void SetConVar(AdminContext context, string cvName, object value)
+        public static void SetConVar(Context context, string cvName, object value)
         {
             Convar convar;
             if (!context.RequestConvar(cvName, out convar)) return;
             convar.Value = value;
         }
 
+        [DefaultAdminFilter]
         [Command("toggle", "Toggles a boolean-type convar.")]
-        public static void Toggle(AdminContext context, string cvName)
+        public static void Toggle(Context context, string cvName)
         {
             Convar convar;
             if (!context.RequestConvar(cvName, out convar)) return;
@@ -99,8 +104,9 @@ namespace DeveloperCommands
             convar.Value = !((bool)convar.Value);
         }
 
+        [DefaultAdminFilter]
         [Command("inc", "Adds 1 to the specified convar. Must be a number.")]
-        public static void Increment(AdminContext context, string cvName)
+        public static void Increment(Context context, string cvName)
         {
             Convar convar;
             if (!context.RequestConvar(cvName, out convar)) return;
@@ -114,8 +120,9 @@ namespace DeveloperCommands
             convar.Value = o;
         }
 
+        [DefaultAdminFilter]
         [Command("dec", "Subtracts 1 from the specified convar. Must be a number.")]
-        public static void Decrement(AdminContext context, string cvName)
+        public static void Decrement(Context context, string cvName)
         {
             Convar convar;
             if (!context.RequestConvar(cvName, out convar)) return;
@@ -129,8 +136,9 @@ namespace DeveloperCommands
             convar.Value = o;
         }
 
+        [DefaultAdminFilter]
         [Command("revert", "Sets a convar to its default value.")]
-        public static void ResetConvar(AdminContext context, string cvName)
+        public static void ResetConvar(Context context, string cvName)
         {
             Convar convar;
             if (!context.RequestConvar(cvName, out convar)) return;
@@ -164,5 +172,10 @@ namespace DeveloperCommands
             sb.Append("Usage: ").Append(cmd.QualifiedName).Append(" ").Append(cmd.ParamHelpString);
             context.Post(sb.ToString());
         }
+    }
+
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    internal class DefaultAdminFilterAttribute : Attribute
+    {
     }
 }

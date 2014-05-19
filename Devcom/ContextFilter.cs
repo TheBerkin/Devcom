@@ -9,6 +9,11 @@ namespace DeveloperCommands
     public class ContextFilter
     {
         /// <summary>
+        /// The filter that is applied to admin-level system commands.
+        /// </summary>
+        public static readonly ContextFilter DefaultAdminFilter = new ContextFilter(ContextFilterType.Whitelist, ContextFilterPolicy.IncludeDerived, typeof(AdminContext));
+
+        /// <summary>
         /// The type of the filter.
         /// </summary>
         public ContextFilterType FilterType { get; set; }
@@ -27,7 +32,7 @@ namespace DeveloperCommands
         /// <param name="filterType">The type of the filter.</param>
         /// <param name="filterPolicy">The filter policy that determines which types are affected by the filter.</param>
         /// <param name="contextTypes">The context types affected by the filter.</param>
-        public ContextFilter(ContextFilterType filterType, ContextFilterPolicy filterPolicy, Type[] contextTypes)
+        public ContextFilter(ContextFilterType filterType, ContextFilterPolicy filterPolicy, params Type[] contextTypes)
         {
             FilterType = filterType;
             FilterPolicy = filterPolicy;

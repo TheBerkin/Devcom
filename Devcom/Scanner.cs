@@ -56,9 +56,12 @@ namespace DeveloperCommands
                     if (cmdlist.ContainsKey(Util.Qualify(cat, cmdAttr.Name))) continue;
 
                     var filterAttr = attributes.FirstOrDefault(attr => attr is ContextFilterAttribute) as ContextFilterAttribute;
+                    var filterAdminDefaultAttr = attributes.FirstOrDefault(attr => attr is DefaultAdminFilterAttribute);
 
                     var command = new Command(method, cmdAttr.Name, cmdAttr.Description, cat,
-                        categoryFilter ?? (filterAttr == null ? null : filterAttr.CreateFilterInternal()));
+                        filterAdminDefaultAttr != null
+                        ? ContextFilter.DefaultAdminFilter
+                        : categoryFilter ?? (filterAttr == null ? null : filterAttr.CreateFilterInternal()));
 
                     cmdlist[command.QualifiedName] = command;
                 }

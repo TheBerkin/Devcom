@@ -15,7 +15,6 @@ namespace DeveloperCommands
         private readonly ParameterInfo[] _paramList;
         private readonly bool _hasParamsArgument;
         private readonly Type _contextType;
-        private readonly ContextFilter _filter;
 
         /// <summary>
         /// The name of the command.
@@ -60,10 +59,7 @@ namespace DeveloperCommands
         /// <summary>
         /// The filter rules applies to the command.
         /// </summary>
-        public ContextFilter Filter
-        {
-            get { return _filter; }
-        }
+        public ContextFilter Filter { get; set; }
 
         /// <summary>
         /// The base context type required by the command.
@@ -76,7 +72,7 @@ namespace DeveloperCommands
         internal Command(MethodInfo method, string name, string desc, string category, ContextFilter filter = null)
         {
             _method = method;
-            _filter = filter;
+            Filter = filter;
 
             var pl = _method.GetParameters();
             if (pl.Any())
@@ -94,7 +90,7 @@ namespace DeveloperCommands
                 throw new ArgumentException("Command creation failed: Method '" + method.Name + "' requires a DevcomContext as the first parameter.");
             }
 
-            if (filter != null && !ContextFilter.Test(_contextType, _filter))
+            if (filter != null && !ContextFilter.Test(_contextType, Filter))
             {
                 throw new ArgumentException("Command creation failed: The base context type '"+_contextType.Name +"' will always be rejected by the filter rules you specified.");
             }
@@ -116,7 +112,7 @@ namespace DeveloperCommands
             var currentContextType = context.GetType();
 
             // Check context type compatability
-            if ((!currentContextType.IsSubclassOf(_contextType) && currentContextType != _contextType) || !ContextFilter.Test(currentContextType, _filter))
+            if ((!currentContextType.IsSubclassOf(_contextType) && currentContextType != _contextType) || !ContextFilter.Test(currentContextType, Filter))
             {
                 context.PostCommandNotFound(QualifiedName);
                 return false;
