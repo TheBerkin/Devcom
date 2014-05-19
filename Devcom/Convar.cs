@@ -6,33 +6,14 @@ namespace DeveloperCommands
     /// <summary>
     /// Represents a variable that can be edited from within Devcom.
     /// </summary>
-    public class Convar
+    public abstract class Convar
     {
         private readonly string _name, _desc, _cat;
-        private readonly PropertyInfo _property;
-        private object _valueObject;
-        private readonly object _defaultValue;
+        protected readonly object _defaultValue;
 
-        internal Convar(PropertyInfo property, string name, string desc, string cat, object defaultValue)
+        internal Convar(string name, string desc, string cat, object defaultValue)
         {
             _defaultValue = defaultValue;
-            if (property != null)
-            {
-                if (!property.GetGetMethod().IsStatic)
-                {
-                    throw new ArgumentException("Convar creation failed: The property '" + property.Name + "' is not static.");
-                }
-                _property = property;
-                if (defaultValue != null)
-                {
-                    _property.SetValue(null, defaultValue);
-                }
-            }
-            else
-            {
-                _property = null;
-                _valueObject = defaultValue;
-            }
             _name = name;
             _desc = desc;
             _cat = cat;
@@ -81,54 +62,55 @@ namespace DeveloperCommands
         /// <summary>
         /// The value of the convar.
         /// </summary>
-        public object Value
+        public abstract object Value { get; set; }
+
+        /// <summary>
+        /// Registers a new object-based convar.
+        /// </summary>
+        /// <param name="value">The initial and default value of the convar.</param>
+        /// <param name="name">The name of the convar.</param>
+        /// <param name="description">The descriptiono of the convar.</param>
+        /// <param name="category">The category the convar belongs to.</param>
+        /// <returns>Returns the created convar, or null if a convar with the specified name already exists.</returns>
+        public static ObjectConvar Register(object value, string name, string description, string category)
         {
-            get
-            {
-                return _property == null ? _valueObject : _property.GetValue(null);
-            }
-            set
-            {
-                if (value == null)
-                {
-                    _valueObject = null;
-                }
-                else if (_property == null)
-                {
-                    _valueObject = value;
-                }
-                else
-                {
-                    try
-                    {
-                        _property.SetValue(null, Convert.ChangeType(value, _property.PropertyType));
-                    }
-                    catch
-                    {
-                        _property.SetValue(null, null);
-                    }
-                }
-            }
+            if (Devcom.Convars.ContainsKey(Util.Qualify(category, name))) return null;
+            var convar = new ObjectConvar(value, name, description, category);
+            Devcom.Convars[convar.QualifiedName] = convar;
+            return convar;
         }
 
         /// <summary>
-        /// Registers a new convar and returns the resulting Convar object. If a convar with the specified name already exists, the old one will be returned.
+        /// Registers a new property-based convar.
         /// </summary>
-        /// <param name="convarName">The name of the convar.</param>
-        /// <param name="value">The initial value of the convar.</param>
-        /// <param name="cat">The category under which to put the convar.</param>
-        /// <param name="desc">The description of the convar.</param>
-        /// <param name="defaultValue">The default value of the convar.</param>
-        /// <returns></returns>
-        public static Convar Register(string convarName, object value, string cat = "", string desc = "", object defaultValue = null)
+        /// <param name="property">The static property to associate with the convar.</param>
+        /// <param name="name">The name of the convar.</param>
+        /// <param name="description">The descriptiono of the convar.</param>
+        /// <param name="category">The category the convar belongs to.</param>
+        /// <param name="defaultValue">The default value to assign to the convar.</param>
+        /// <returns>Returns the created convar, or null if a convar with the specified name already exists.</returns>
+        public static PropertyConvar Register(PropertyInfo property, string name, string description, string category, object defaultValue = null)
         {
-            Convar convar;
-            if (Devcom.Convars.TryGetValue(Util.Qualify(cat, convarName), out convar))
-            {
-                return convar;
-            }
-            convar = new Convar(null, convarName, desc, cat, defaultValue);
-            convar.Value = value;
+            if (Devcom.Convars.ContainsKey(Util.Qualify(category, name))) return null;
+            var convar = new PropertyConvar(property, name, description, category, defaultValue);
+            Devcom.Convars[convar.QualifiedName] = convar;
+            return convar;
+        }
+
+        /// <summary>
+        /// Registers a new field-based convar.
+        /// </summary>
+        /// <param name="field">The static field to associate with the convar.</param>
+        /// <param name="name">The name of the convar.</param>
+        /// <param name="description">The descriptiono of the convar.</param>
+        /// <param name="category">The category the convar belongs to.</param>
+        /// <param name="defaultValue">The default value to assign to the convar.</param>
+        /// <returns>Returns the created convar, or null if a convar with the specified name already exists.</returns>
+        public static FieldConvar Register(FieldInfo field, string name, string description, string category, object defaultValue = null)
+        {
+            if (Devcom.Convars.ContainsKey(Util.Qualify(category, name))) return null;
+            var convar = new FieldConvar(field, name, description, category, defaultValue);
+            Devcom.Convars[convar.QualifiedName] = convar;
             return convar;
         }
     }

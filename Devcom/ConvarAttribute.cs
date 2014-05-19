@@ -5,7 +5,7 @@ namespace DeveloperCommands
     /// <summary>
     /// Used to mark a static property as a convar.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public sealed class ConvarAttribute : Attribute
     {
         /// <summary>

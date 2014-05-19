@@ -14,6 +14,6 @@
             "echo_input",
             "Determines if input sent to the Devcom engine should be echoed in the output before execution.",
             false)]
-        public static bool EchoInput { get; set; }
+        public static bool EchoInput = false;
     }
 }

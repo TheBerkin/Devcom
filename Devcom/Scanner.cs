@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 
@@ -68,9 +69,19 @@ namespace DeveloperCommands
                                 p => p.GetGetMethod().IsStatic && p.GetGetMethod().IsPublic && p.GetSetMethod().IsPublic)
                             .SelectMany(p => p.GetCustomAttributes<ConvarAttribute>()
                                 .Where(attr => !convars.ContainsKey(Util.Qualify(cat, attr.Name)))
-                                .Select(attr => new Convar(p, attr.Name, attr.Description, cat, attr.DefaultValue))))
+                                .Select(attr => new PropertyConvar(p, attr.Name, attr.Description, cat, attr.DefaultValue))))
                 {
-                    convars[convar.QualifiedName.ToLower()] = convar;
+                    convars[convar.QualifiedName] = convar;
+                }
+
+                foreach (var convar in cl.GetFields()
+                    .Where(
+                        f => f.IsStatic && f.IsPublic)
+                    .SelectMany(f => f.GetCustomAttributes<ConvarAttribute>()
+                        .Where(attr => !convars.ContainsKey(Util.Qualify(cat, attr.Name)))
+                        .Select(attr => new FieldConvar(f, attr.Name, attr.Description, cat, attr.DefaultValue))))
+                {
+                    convars[convar.QualifiedName] = convar;
                 }
             }
         }

@@ -47,9 +47,12 @@
     <Compile Include="Convar.cs" />
     <Compile Include="ConvarAttribute.cs" />
     <Compile Include="ConvarConfig.cs" />
+    <Compile Include="FieldConvar.cs" />
+    <Compile Include="ObjectConvar.cs" />
+    <Compile Include="PropertyConvar.cs" />
     <Compile Include="Scanner.cs" />
     <Compile Include="DevcomCategoryAttribute.cs" />
-    <Compile Include="DevcomContext.cs" />
+    <Compile Include="Context.cs" />
     <Compile Include="Devcom.cs" />
     <Compile Include="CommandDef.cs" />
     <Compile Include="CommandAttribute.cs" />
