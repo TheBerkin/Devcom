@@ -109,7 +109,7 @@ namespace DeveloperCommands
                 cat = "";
                 name = name.Substring(1);
             }
-
+            
             string qname = (cat.Length > 0 ? cat + "." : "") + name;
             Convar convar;
             if (!Devcom.Convars.TryGetValue(qname, out convar))

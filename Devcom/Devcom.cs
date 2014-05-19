@@ -44,10 +44,14 @@ namespace DeveloperCommands
         public static void Load(bool loadConfig, params Assembly[] definitionAssemblies)
         {
             if (_loaded) return;
+            // Always scan this assembly
+            Scanner.SearchAssembly(Assembly.GetAssembly(typeof(Devcom)), Commands, Convars);
+            // Scan listed assemblies
             foreach (var ass in definitionAssemblies)
             {
                 Scanner.SearchAssembly(ass, Commands, Convars);
             }
+
             if (loadConfig) ConvarConfig.LoadConvars();
             Print(CopyrightString);
             _loaded = true;
@@ -174,7 +178,7 @@ namespace DeveloperCommands
         /// Executes a command string asynchronously under the default context.
         /// </summary>
         /// <param name="command">The command to execute.</param>
-        public static async void SendCommndAsync(string command)
+        public static async void SendCommandAsync(string command)
         {
             await Task.Run(() => SendCommand(Context.Default, command));
         }
@@ -200,7 +204,8 @@ namespace DeveloperCommands
             query = query.ToLower();
             return
                 Commands.Where(pair => beginsWith ? pair.Key.StartsWith(query) : pair.Key.Contains(query))
-                    .Select(pair => pair.Value.ParamHelpString);
+                    .Select(pair => pair.Value.ParamHelpString)
+                    .OrderBy(fn => fn.Length);
         }
 
         /// <summary>
@@ -213,7 +218,32 @@ namespace DeveloperCommands
         {
             query = query.ToLower();
             return Convars.Where(pair => beginsWith ? pair.Key.StartsWith(query) : pair.Key.Contains(query))
-                .Select(pair => pair.Value);
+                .Select(pair => pair.Value)
+                .OrderBy(cv => cv.QualifiedName);
+        }
+
+        /// <summary>
+        /// Creates a new command using the specified method, metadata, and an optional filter.
+        /// </summary>
+        /// <param name="method">The method to associate with the command.</param>
+        /// <param name="name">The name of the command.</param>
+        /// <param name="description">The description of the command.</param>
+        /// <param name="category">The category under which to place the command.</param>
+        /// <param name="filter">The filter rules to apply to the command.</param>
+        /// <returns></returns>
+        public static Command CreateCommand(MethodInfo method, string name, string description, string category, ContextFilter filter = null)
+        {
+            if (name == null)
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            name = name.Trim().ToLower();
+            var qname = Util.Qualify(category ?? "", name);
+
+            if (Commands.ContainsKey(qname)) return null;
+
+            return Commands[qname] = new Command(method, name, description, category, filter);
         }
 
         /// <summary>

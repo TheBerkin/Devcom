@@ -26,7 +26,7 @@ namespace DeveloperCommands
             foreach(var cl in ass.GetTypes().Where(t => t.IsClass))           
             {
                 string cat = "";
-                ContextFilterInternal categoryFilter = null;
+                ContextFilter categoryFilter = null;
                 bool found = false;
                 foreach(var attr in cl.GetCustomAttributes())
                 {

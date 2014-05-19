@@ -142,7 +142,7 @@ namespace DeveloperCommands
         {
             var contextType = context.GetType();
             context.Post(
-                Devcom.Commands.Where(cmd => ContextFilterInternal.Test(contextType, cmd.Value.ContextFilter) && 
+                Devcom.Commands.Where(cmd => ContextFilter.Test(contextType, cmd.Value.Filter) && 
                     (cmd.Value.ContextType == contextType || contextType.IsSubclassOf(cmd.Value.ContextType)))
                 .Select(cmd => cmd.Key)
                 .Aggregate((accum, name) => accum + "\n" + name));

@@ -13,6 +13,12 @@ namespace DeveloperCommands
         /// The type of filter to apply.
         /// </summary>
         internal ContextFilterType FilterType { get; private set; }
+
+        /// <summary>
+        /// The policy for examining context types.
+        /// </summary>
+        internal ContextFilterPolicy FilterPolicy { get; private set; }
+
         /// <summary>
         /// The contexts that will be affected by the filter.
         /// </summary>
@@ -22,8 +28,9 @@ namespace DeveloperCommands
         /// Creates a new ContextFilter attribute with the specified filter type and context types.
         /// </summary>
         /// <param name="filterType">The type of filter to apply</param>
+        /// <param name="filterPolicy">The filter policy to apply.</param>
         /// <param name="contextTypes">The contexts that will be affected by the filter.</param>
-        public ContextFilterAttribute(ContextFilterType filterType, params Type[] contextTypes)
+        public ContextFilterAttribute(ContextFilterType filterType, ContextFilterPolicy filterPolicy, params Type[] contextTypes)
         {
             if (contextTypes != null)
             {
@@ -34,12 +41,13 @@ namespace DeveloperCommands
                 }
             }
             FilterType = filterType;
+            FilterPolicy = filterPolicy;
             ContextTypes = contextTypes;
         }
 
-        internal ContextFilterInternal CreateFilterInternal()
+        internal ContextFilter CreateFilterInternal()
         {
-            return new ContextFilterInternal(FilterType, ContextTypes);
+            return new ContextFilter(FilterType, FilterPolicy, ContextTypes);
         }
     }
 }

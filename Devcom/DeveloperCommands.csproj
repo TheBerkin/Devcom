@@ -42,11 +42,12 @@
   <ItemGroup>
     <Compile Include="AdminContext.cs" />
     <Compile Include="ContextFilterAttribute.cs" />
-    <Compile Include="ContextFilterInternal.cs" />
+    <Compile Include="ContextFilter.cs" />
     <Compile Include="ContextFilterType.cs" />
     <Compile Include="Convar.cs" />
     <Compile Include="ConvarAttribute.cs" />
     <Compile Include="ConvarConfig.cs" />
+    <Compile Include="ContextFilterPolicy.cs" />
     <Compile Include="FieldConvar.cs" />
     <Compile Include="ObjectConvar.cs" />
     <Compile Include="PropertyConvar.cs" />
