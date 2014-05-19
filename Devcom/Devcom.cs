@@ -20,6 +20,8 @@ namespace DeveloperCommands
         internal static readonly Dictionary<string, Convar> Convars = new Dictionary<string, Convar>(); 
         private static bool _loaded;
 
+        internal const string CopyrightString = "Powered by Devcom v1.1 - Copyright (c) 2014 Nicholas Fleck";
+
         /// <summary>
         /// Scans all assemblies in the current application domain, and their references, for command/convar definitions.
         /// </summary>
@@ -29,6 +31,7 @@ namespace DeveloperCommands
             if (_loaded) return;
             Scanner.FindAllDefs(Commands, Convars);
             if (loadConfig) ConvarConfig.LoadConvars();
+            Print(CopyrightString);
             _loaded = true;
         }
 
@@ -45,6 +48,7 @@ namespace DeveloperCommands
                 Scanner.SearchAssembly(ass, Commands, Convars);
             }
             if (loadConfig) ConvarConfig.LoadConvars();
+            Print(CopyrightString);
             _loaded = true;
         }
 
