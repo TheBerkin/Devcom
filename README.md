@@ -12,7 +12,7 @@ static void Main(string[] args)
     Devcom.Load();
     while(true)
     {
-        Console.Write(DevcomContext.Default.Prompt);
+        Console.Write(Context.Default.Prompt);
         Devcom.SendCommand(Console.ReadLine());
     }
 }
@@ -32,7 +32,7 @@ namespace Example
     public static class Commands
     {
         [Command("add", "Adds two numbers. Because why not.")]
-        public static void Add(DevcomContext context, float a, float b)
+        public static void Add(Context context, float a, float b)
         {
             Devcom.Print(a + b);
         }
@@ -50,7 +50,7 @@ devcom > add 12 18
 
 ###Convars
 
-Convars are just as easy to create in code. To make one, use the `[Convar]` attribute on any static property. Here's an example:
+Convars are just as easy to create in code. To make one, use the `[Convar]` attribute on any static property or field. Here's an example:
 
 ```cs
 using System;
