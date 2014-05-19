@@ -194,18 +194,19 @@ namespace DeveloperCommands
         }
 
         /// <summary>
-        /// Searches for commands containing the specified substring and returns a collection of matching command outlines.
+        /// Searches for commands containing the specified substring and returns a collection of matches.
         /// </summary>
         /// <param name="query">The query to search for.</param>
         /// <param name="beginsWith">Indicates if the search should only return results that begin with the query.</param>
         /// <returns></returns>
-        public static IEnumerable<string> SearchCommands(string query, bool beginsWith = true)
+        public static IEnumerable<Command> SearchCommands(string query, bool beginsWith = true)
         {
             query = query.ToLower();
             return
                 Commands.Where(pair => beginsWith ? pair.Key.StartsWith(query) : pair.Key.Contains(query))
-                    .Select(pair => pair.Value.ParamHelpString)
-                    .OrderBy(fn => fn.Length);
+                    .Select(pair => pair.Value)
+                    .OrderBy(fn => fn.QualifiedName.Length)
+                    .ThenBy(fn => fn.ParamHelpString.Length);
         }
 
         /// <summary>
