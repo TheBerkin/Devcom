@@ -20,9 +20,8 @@ namespace DeveloperCommands
         /// </summary>
         public static readonly Context Default = CreateDefaultContext();
 
-        private readonly string _name;
+        private readonly string _name, _cat;
         private bool _disposed, _locked;
-        private string _cat;
 
         /// <summary>
         /// Creates a new DevcomContext with the specified name, and registers it.
@@ -117,7 +116,6 @@ namespace DeveloperCommands
         public string Category
         {
             get { return _cat; }
-            set { _cat = value; }
         }
 
         /// <summary>
