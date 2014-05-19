@@ -10,7 +10,7 @@ namespace DeveloperCommands
     /// Specifies a category to assign to all commands within a class.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class DevcomCategoryAttribute : Attribute
+    public class CategoryAttribute : Attribute
     {
         /// <summary>
         /// The category name.
@@ -25,7 +25,7 @@ namespace DeveloperCommands
         /// Creates a new DevcomCategory attribute.
         /// </summary>
         /// <param name="category">The category name.</param>
-        public DevcomCategoryAttribute(string category)
+        public CategoryAttribute(string category)
         {
             if (!Util.IsValidName(category, "_-"))
             {
@@ -37,7 +37,7 @@ namespace DeveloperCommands
         /// <summary>
         /// Creates a new, empty DevcomCategory attribute.
         /// </summary>
-        public DevcomCategoryAttribute()
+        public CategoryAttribute()
         {
             Category = "";
         }

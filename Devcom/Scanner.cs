@@ -30,7 +30,7 @@ namespace DeveloperCommands
                 bool found = false;
                 foreach(var attr in cl.GetCustomAttributes())
                 {
-                    var attrCat = attr as DevcomCategoryAttribute;
+                    var attrCat = attr as CategoryAttribute;
                     var attrFilter = attr as ContextFilterAttribute;
                     if (attrCat != null)
                     {

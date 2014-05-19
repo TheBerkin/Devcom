@@ -3,7 +3,7 @@ using DeveloperCommands;
 
 namespace DCTest
 {
-    [DevcomCategory]
+    [Category]
     public class Commands
     {
         [Command("printc", "Prints some colored text.")]

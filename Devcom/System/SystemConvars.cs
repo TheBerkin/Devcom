@@ -3,7 +3,7 @@
     /// <summary>
     /// Contains the default convars used by the Devcom engine.
     /// </summary>
-    [DevcomCategory]
+    [Category]
     public static class SystemConvars
     {
         /// <summary>

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DeveloperCommands
 {
-    [DevcomCategory]
+    [Category]
     internal static class SystemCommands
     {
         [Command("cat", "Changes the active category. Pass $ to return to root.")]
