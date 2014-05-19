@@ -48,7 +48,6 @@
     <Compile Include="ConvarAttribute.cs" />
     <Compile Include="ConvarConfig.cs" />
     <Compile Include="ContextFilterPolicy.cs" />
-    <Compile Include="DefaultAdminFilterAttribute.cs" />
     <Compile Include="FieldConvar.cs" />
     <Compile Include="ObjectConvar.cs" />
     <Compile Include="PropertyConvar.cs" />

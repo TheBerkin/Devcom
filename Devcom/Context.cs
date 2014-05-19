@@ -125,7 +125,7 @@ namespace DeveloperCommands
         /// </summary>
         public string Prompt
         {
-            get { return _name + (_cat.Length > 0 ? "." + _cat : "") + " > "; }
+            get { return _name + (_cat.Length > 0 ? "." + _cat : "") + "> "; }
         }
 
         internal static AdminContext CreateDefaultAdminContext()
