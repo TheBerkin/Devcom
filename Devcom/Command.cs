@@ -140,15 +140,7 @@ namespace DeveloperCommands
                 // Convert parameters to the proper types
                 for (int i = 0; i < argc; i++)
                 {
-                    var paramType = _paramList[(i >= paramc ? paramc - 1 : i) + 1].ParameterType;
-                    try
-                    {
-                        boxed[i] = Convert.ChangeType(args[i], paramType);
-                    }
-                    catch
-                    {
-                        boxed[i] = null;
-                    }               
+                    boxed[i] = Util.ChangeType(args[i], _paramList[(i >= paramc ? paramc - 1 : i) + 1].ParameterType);   
                 }
                 
                 var argsFormatted = new List<object> { context };

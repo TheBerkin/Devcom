@@ -24,7 +24,7 @@ namespace DeveloperCommands
             {
                 try
                 {
-                    _value = Convert.ChangeType(value, _valueType);
+                    _value = Util.ChangeType(value, _valueType);
                 }
                 catch
                 {

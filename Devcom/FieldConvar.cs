@@ -37,7 +37,7 @@ namespace DeveloperCommands
             {
                 try
                 {
-                    _field.SetValue(null, Convert.ChangeType(value, _field.FieldType));
+                    _field.SetValue(null, Util.ChangeType(value, _field.FieldType));
                 }
                 catch
                 {

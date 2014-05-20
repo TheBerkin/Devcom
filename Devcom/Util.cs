@@ -1,13 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeveloperCommands
 {
     internal static class Util
     {
+        public static object ChangeType(object obj, Type convertType)
+        {
+            if (obj == null) return null;
+            if (convertType == typeof(bool))
+            {
+                var objString = obj.ToString().ToLower().Trim();
+                switch (objString)
+                {
+                    case "true":
+                    case "yes":
+                    case "on":
+                    case "y":
+                    case "t":
+                    case "1":
+                    case "1.0":
+                        return true;
+                    case "false":
+                    case "no":
+                    case "off":
+                    case "n":
+                    case "f":
+                    case "0":
+                    case "0.0":
+                        return false;
+                    default:
+                        return false;
+                }
+            }
+            try
+            {
+                return Convert.ChangeType(obj, convertType);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public static bool Increment(ref object o)
         {
             switch (Type.GetTypeCode(o.GetType()))

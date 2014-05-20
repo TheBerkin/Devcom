@@ -82,7 +82,7 @@ namespace DeveloperCommands
 
         [DefaultAdminFilter]
         [Command("set", "Sets a convar.")]
-        public static void SetConVar(Context context, string cvName, object value)
+        public static void SetConVar(Context context, string cvName, string value)
         {
             Convar convar;
             if (!context.RequestConvar(cvName, out convar)) return;

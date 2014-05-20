@@ -37,7 +37,7 @@ namespace DeveloperCommands
             {
                 try
                 {
-                    _property.SetValue(null, Convert.ChangeType(value, _property.PropertyType));
+                    _property.SetValue(null, Util.ChangeType(value, _property.PropertyType));
                 }
                 catch
                 {
