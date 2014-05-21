@@ -71,11 +71,11 @@ namespace Example
 }
 ```
 
-Any convar's value can be inserted into a command by surrounding the name of the convar in curly brackets. Here is an example showing the `set` command to set the convar, and the `echo` command to display it:
+Any convar's value can be inserted into a command by surrounding the name of the convar in colons. Here is an example showing the `set` command to set the convar, and the `echo` command to display it:
 ```
-devcom > echo "MyInt = {example.my_int}"
+devcom > echo "MyInt = :example.my_int:"
 MyInt = 0
 devcom > set example.my_int 123
-devcom > echo "MyInt = {example.my_int}"
+devcom > echo "MyInt = :example.my_int:"
 MyInt = 123
 ```
