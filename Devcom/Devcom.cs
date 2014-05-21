@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace DeveloperCommands
@@ -162,10 +163,9 @@ namespace DeveloperCommands
                 {
                     for (int i = 1; i < parts.Length; i++)
                     {
-                        if (parts[i].StartsWith("{") && parts[i].EndsWith("}"))
-                        {
-                            parts[i] = Util.GetConvarValue(parts[i].Trim(new[] {'{', '}'}), context.Category);
-                        }
+                        parts[i] = Regex.Replace(parts[i], @":(?<name>\S+):",
+                            m => Util.GetConvarValue(m.Groups["name"].Value, context.Category),
+                            RegexOptions.ExplicitCapture);
                     }
                 }
 
