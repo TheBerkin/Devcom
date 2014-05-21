@@ -30,7 +30,7 @@ namespace DeveloperCommands
             }
         }
 
-        public override object Value
+        public override dynamic Value
         {
             get { return _property.GetValue(null); }
             set

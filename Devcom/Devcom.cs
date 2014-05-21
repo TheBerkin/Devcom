@@ -114,7 +114,7 @@ namespace DeveloperCommands
 
             if (SystemConvars.EchoInput)
             {
-                context.Post(command);
+                context.Notify(command);
             }
 
             // Don't interpret empty commands

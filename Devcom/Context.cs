@@ -60,7 +60,7 @@ namespace DeveloperCommands
         /// Posts a string to the output of this context.
         /// </summary>
         /// <param name="message"></param>
-        public virtual void Post(string message)
+        public virtual void Notify(string message)
         {
             Devcom.Print(message);
         }
@@ -69,9 +69,9 @@ namespace DeveloperCommands
         /// Posts an object's string value to the output of this context.
         /// </summary>
         /// <param name="value"></param>
-        public virtual void Post(object value)
+        public virtual void Notify(object value)
         {
-            Post(value.ToString());
+            Notify(value.ToString());
         }
 
         /// <summary>
@@ -79,9 +79,9 @@ namespace DeveloperCommands
         /// </summary>
         /// <param name="message">The format string to pass.</param>
         /// <param name="args">The arguments to insert into the format string.</param>
-        public void PostFormat(string message, params object[] args)
+        public void NotifyFormat(string message, params object[] args)
         {
-            Post(String.Format(message, args));
+            Notify(String.Format(message, args));
         }
 
         /// <summary>
@@ -94,13 +94,38 @@ namespace DeveloperCommands
         public bool RequestConvar(string cvName, out Convar convar)
         {
             if (Devcom.Convars.TryGetValue(Util.Qualify(Category, cvName), out convar)) return true;
-            Post("Convar '" + cvName + "' not found.");
+            Notify("Convar '" + cvName + "' not found.");
             return false;
+        }
+
+        /// <summary>
+        /// Searches for a numeric convar with the specified name and sends it to the 'convar' output parameter.
+        /// If not found, a notification will be sent to the context.
+        /// </summary>
+        /// <param name="cvName">The name of the convar.</param>
+        /// <param name="convar">The Convar object to send the result to.</param>
+        /// <returns></returns>
+        public bool RequestNumericConvar(string cvName, out Convar convar)
+        {
+            convar = null;
+            Convar cv;
+            if (!Devcom.Convars.TryGetValue(Util.Qualify(Category, cvName), out cv))
+            {
+                Notify("Convar '" + cvName + "' not found.");
+                return false;
+            }
+            if (!Util.IsNumericType(cv.Value))
+            {
+                Notify("Convar '" + cvName + "' is not a numeric type.");
+                return false;
+            }
+            convar = cv;
+            return true;
         }
 
         internal void PostCommandNotFound(string commandName)
         {
-            Post("Command not found: '" + commandName + "'");
+            Notify("Command not found: '" + commandName + "'");
         }
 
         /// <summary>

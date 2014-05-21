@@ -9,7 +9,7 @@ namespace DeveloperCommands
     public abstract class Convar
     {
         private readonly string _name, _desc, _cat;
-        protected readonly object _defaultValue;
+        protected readonly dynamic _defaultValue;
 
         internal Convar(string name, string desc, string cat, object defaultValue)
         {
@@ -54,7 +54,7 @@ namespace DeveloperCommands
         /// <summary>
         /// The default value of the convar.
         /// </summary>
-        public object DefaultValue
+        public dynamic DefaultValue
         {
             get { return _defaultValue; }
         }
@@ -62,7 +62,7 @@ namespace DeveloperCommands
         /// <summary>
         /// The value of the convar.
         /// </summary>
-        public abstract object Value { get; set; }
+        public abstract dynamic Value { get; set; }
 
         /// <summary>
         /// Registers a new object-based convar.
@@ -72,7 +72,7 @@ namespace DeveloperCommands
         /// <param name="description">The descriptiono of the convar.</param>
         /// <param name="category">The category the convar belongs to.</param>
         /// <returns>Returns the created convar, or null if a convar with the specified name already exists.</returns>
-        public static ObjectConvar Register(object value, string name, string description, string category)
+        public static ObjectConvar CreateConvar(object value, string name, string description, string category)
         {
             if (Devcom.Convars.ContainsKey(Util.Qualify(category, name))) return null;
             var convar = new ObjectConvar(value, name, description, category);
@@ -89,7 +89,7 @@ namespace DeveloperCommands
         /// <param name="category">The category the convar belongs to.</param>
         /// <param name="defaultValue">The default value to assign to the convar.</param>
         /// <returns>Returns the created convar, or null if a convar with the specified name already exists.</returns>
-        public static PropertyConvar Register(PropertyInfo property, string name, string description, string category, object defaultValue = null)
+        public static PropertyConvar CreateConvar(PropertyInfo property, string name, string description, string category, object defaultValue = null)
         {
             if (Devcom.Convars.ContainsKey(Util.Qualify(category, name))) return null;
             var convar = new PropertyConvar(property, name, description, category, defaultValue);
@@ -106,7 +106,7 @@ namespace DeveloperCommands
         /// <param name="category">The category the convar belongs to.</param>
         /// <param name="defaultValue">The default value to assign to the convar.</param>
         /// <returns>Returns the created convar, or null if a convar with the specified name already exists.</returns>
-        public static FieldConvar Register(FieldInfo field, string name, string description, string category, object defaultValue = null)
+        public static FieldConvar CreateConvar(FieldInfo field, string name, string description, string category, object defaultValue = null)
         {
             if (Devcom.Convars.ContainsKey(Util.Qualify(category, name))) return null;
             var convar = new FieldConvar(field, name, description, category, defaultValue);

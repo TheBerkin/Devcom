@@ -14,7 +14,7 @@ namespace DeveloperCommands
             var cat = category.ToLower().Trim();
             if (cat == "")
             {
-                context.Post("Current category: " + context.Category);
+                context.Notify("Current category: " + context.Category);
                 return;
             }
             context.Category = cat == "$" ? "" : cat;
@@ -31,7 +31,7 @@ namespace DeveloperCommands
         {
             foreach (var msg in message)
             {
-                context.Post(msg);
+                context.Notify(msg);
             }
         }
 
@@ -69,7 +69,7 @@ namespace DeveloperCommands
                 }
                 catch (Exception ex)
                 {
-                    context.PostFormat("Failed to load {0}: '{1}'", path, ex.Message);
+                    context.NotifyFormat("Failed to load {0}: '{1}'", path, ex.Message);
                 }
             }
         }
@@ -77,7 +77,7 @@ namespace DeveloperCommands
         [Command("date", "Displays the current date.")]
         public static void Date(Context context)
         {
-            context.Post(DateTime.Now.ToString("R"));
+            context.Notify(DateTime.Now.ToString("R"));
         }
 
         [DefaultAdminFilter]
@@ -98,7 +98,7 @@ namespace DeveloperCommands
 
             if (convar.Value.GetType() != typeof(bool))
             {
-                context.Post("Convar '" + cvName + "' is not a boolean type.");
+                context.Notify("Convar '" + cvName + "' is not a boolean type.");
                 return;
             }
             convar.Value = !((bool)convar.Value);
@@ -114,7 +114,7 @@ namespace DeveloperCommands
             var o = convar.Value;
             if (!Util.Increment(ref o))
             {
-                context.Post("Convar '" + cvName + "' is not a numeric type.");
+                context.Notify("Convar '" + cvName + "' is not a numeric type.");
                 return;
             }
             convar.Value = o;
@@ -130,7 +130,7 @@ namespace DeveloperCommands
             var o = convar.Value;
             if (!Util.Decrement(ref o))
             {
-                context.Post("Convar '" + cvName + "' is not a numeric type.");
+                context.Notify("Convar '" + cvName + "' is not a numeric type.");
                 return;
             }
             convar.Value = o;
@@ -149,7 +149,7 @@ namespace DeveloperCommands
         public static void ListCommands(Context context)
         {
             var contextType = context.GetType();
-            context.Post(
+            context.Notify(
                 Devcom.Commands.Where(cmd => ContextFilter.Test(contextType, cmd.Value.Filter) && 
                     (cmd.Value.ContextType == contextType || contextType.IsSubclassOf(cmd.Value.ContextType)))
                 .Select(cmd => cmd.Key)
@@ -163,14 +163,14 @@ namespace DeveloperCommands
             Command cmd;
             if (!Devcom.Commands.TryGetValue(Util.Qualify(context.Category, command), out cmd))
             {
-                context.Post("Command not found: '" + command + "'");
+                context.Notify("Command not found: '" + command + "'");
                 return;
             }
             var sb = new StringBuilder();
             sb.Append("Command: ").Append(command).AppendLine();
             sb.Append("Description: ").Append(cmd.Description).AppendLine();
             sb.Append("Usage: ").Append(cmd.QualifiedName).Append(" ").Append(cmd.ParamHelpString);
-            context.Post(sb.ToString());
+            context.Notify(sb.ToString());
         }
     }
 

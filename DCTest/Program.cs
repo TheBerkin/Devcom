@@ -6,9 +6,6 @@ namespace DCTest
     [Category]
     class Program
     {
-        [Convar("testbool")]
-        public static bool TestBool = false;
-
         static void Main(string[] args)
         {
             Console.Title = "Devcom";

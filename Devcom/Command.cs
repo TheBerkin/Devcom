@@ -131,7 +131,7 @@ namespace DeveloperCommands
                 {
                     if (args.Length != paramc)
                     {
-                        context.Post("Parameter count mismatch.");
+                        context.Notify("Parameter count mismatch.");
                         return false;
                     }
                     boxed = new object[paramc];
@@ -159,7 +159,11 @@ namespace DeveloperCommands
             }
             catch(Exception ex)
             {
-                context.Post("Error: " + ex);
+                if (SystemConvars.Throws)
+                {
+                    throw;
+                }
+                context.Notify("Error: " + ex);
                 return false;
             }
             return true;

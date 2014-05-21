@@ -51,12 +51,12 @@ namespace DeveloperCommands
                 {
                     while (!reader.EndOfStream)
                     {
-                        string line = reader.ReadLine().Trim();
+                        var line = reader.ReadLine().Trim();
                         if (line.StartsWith("#")) continue;
                         var match = Regex.Match(line, @"(^|[^#])(?<name>[\w-]+)\s*=(?<value>.*)", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
                         if (!match.Success) continue;
-                        string name = match.Groups["name"].Value.ToLower();
-                        string value = match.Groups["value"].Value.ToLower();
+                        var name = match.Groups["name"].Value.ToLower();
+                        var value = match.Groups["value"].Value;
                         Convar convar;
                         if (!Devcom.Convars.TryGetValue(name, out convar)) continue;
                         convar.Value = value;

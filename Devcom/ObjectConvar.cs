@@ -4,7 +4,7 @@ namespace DeveloperCommands
 {
     public sealed class ObjectConvar : Convar
     {
-        private object _value;
+        private dynamic _value;
         private readonly Type _valueType;
 
         public ObjectConvar(object value, string name, string desc, string cat) : base(name, desc, cat, value)
@@ -17,7 +17,7 @@ namespace DeveloperCommands
             _valueType = value.GetType();
         }
 
-        public override object Value
+        public override dynamic Value
         {
             get { return _value; }
             set

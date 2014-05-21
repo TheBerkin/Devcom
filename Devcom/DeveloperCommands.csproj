@@ -61,6 +61,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="System\SystemCommands.cs" />
     <Compile Include="System\SystemConvars.cs" />
+    <Compile Include="System\SystemMath.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
