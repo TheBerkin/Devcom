@@ -22,7 +22,7 @@ namespace DeveloperCommands
 
         private static bool _loaded;
 
-        internal const string CopyrightString = "Powered by Devcom v1.2 - Copyright (c) 2014 Nicholas Fleck";
+        internal const string CopyrightString = "Powered by Devcom v1.3 - Copyright (c) 2014 Nicholas Fleck";
 
         /// <summary>
         /// Scans all assemblies in the current application domain, and their references, for command/convar definitions.

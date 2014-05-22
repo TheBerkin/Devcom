@@ -102,6 +102,7 @@ namespace DeveloperCommands
                 return;
             }
             convar.Value = !((bool)convar.Value);
+            context.NotifyFormat("{0} = {1}", convar.QualifiedName, convar.Value);
         }
 
         [DefaultAdminFilter]
@@ -167,9 +168,8 @@ namespace DeveloperCommands
                 return;
             }
             var sb = new StringBuilder();
-            sb.Append("Command: ").Append(command).AppendLine();
-            sb.Append("Description: ").Append(cmd.Description).AppendLine();
-            sb.Append("Usage: ").Append(cmd.QualifiedName).Append(" ").Append(cmd.ParamHelpString);
+            sb.Append(cmd.QualifiedName).Append(": ").Append(cmd.Description).AppendLine();
+            sb.Append("Syntax: ").Append(cmd.QualifiedName).Append(" ").Append(cmd.ParamHelpString);
             context.Notify(sb.ToString());
         }
     }

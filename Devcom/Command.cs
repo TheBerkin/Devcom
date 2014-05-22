@@ -110,7 +110,7 @@ namespace DeveloperCommands
 
             _paramHelpString = _paramList.Length > 1
                 ? _paramList.Where((p, i) => i > 0)
-                .Select(p => "<" + p.Name + (p.IsOptional ? " (optional)>" : p.IsDefined(typeof(ParamArrayAttribute)) ? "...>" : ">"))
+                .Select(p => "[" + p.Name + (p.IsOptional ? " (optional)]" : p.IsDefined(typeof(ParamArrayAttribute)) ? " ...]" : "]"))
                 .Aggregate((accum, pname) => accum + " " + pname)
                 : "";
         }
