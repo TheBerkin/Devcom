@@ -2,6 +2,9 @@
 
 namespace DeveloperCommands
 {
+    /// <summary>
+    /// Represents a convar bound to an object instance.
+    /// </summary>
     public sealed class ObjectConvar : Convar
     {
         private dynamic _value;

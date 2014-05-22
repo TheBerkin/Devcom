@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace DeveloperCommands
 {
+    /// <summary>
+    /// Represents a convar bound to a static field.
+    /// </summary>
     public sealed class FieldConvar : Convar
     {
         private readonly FieldInfo _field;
@@ -30,6 +33,9 @@ namespace DeveloperCommands
             }
         }
 
+        /// <summary>
+        /// The value of the convar.
+        /// </summary>
         public override dynamic Value
         {
             get { return _field.GetValue(null); }

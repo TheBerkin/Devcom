@@ -14,6 +14,7 @@ namespace DeveloperCommands
         private readonly MethodInfo _method;
         private readonly ParameterInfo[] _paramList;
         private readonly bool _hasParamsArgument;
+        private readonly int _numOptionalParams;
         private readonly Type _contextType;
 
         /// <summary>
@@ -75,6 +76,11 @@ namespace DeveloperCommands
             Filter = filter;
 
             var pl = _method.GetParameters();
+
+            // Examine parameters for optional/params arguments
+
+            _numOptionalParams = pl.Count(pi => pi.IsOptional);
+
             if (pl.Any())
             {
                 _contextType = pl[0].ParameterType;
@@ -83,16 +89,18 @@ namespace DeveloperCommands
                 {
                     throw new ArgumentException("Command creation failed: Method '" + method.Name + "' requires a DevcomContext as the first parameter.");
                 }
-                _hasParamsArgument = pl.Last().GetCustomAttribute<ParamArrayAttribute>() != null;
+                
+                _hasParamsArgument = pl.Last().GetCustomAttributes<ParamArrayAttribute>().Any();
             }
             else
             {
                 throw new ArgumentException("Command creation failed: Method '" + method.Name + "' requires a DevcomContext as the first parameter.");
             }
 
+            // Check the filter against the minimum context type to make sure it lets it through
             if (filter != null && !ContextFilter.Test(_contextType, Filter))
             {
-                throw new ArgumentException("Command creation failed: The base context type '"+_contextType.Name +"' will always be rejected by the filter rules you specified.");
+                throw new ArgumentException("Command creation failed: The base context type '"+ _contextType.Name +"' will always be rejected by the filter rules you specified.");
             }
 
             _paramList = pl;
@@ -102,7 +110,7 @@ namespace DeveloperCommands
 
             _paramHelpString = _paramList.Length > 1
                 ? _paramList.Where((p, i) => i > 0)
-                .Select(p => "<" + p.Name + (p.IsDefined(typeof(ParamArrayAttribute)) || p.IsOptional ? "(optional)>" : ">"))
+                .Select(p => "<" + p.Name + (p.IsOptional ? " (optional)>" : p.IsDefined(typeof(ParamArrayAttribute)) ? "...>" : ">"))
                 .Aggregate((accum, pname) => accum + " " + pname)
                 : "";
         }
@@ -127,15 +135,13 @@ namespace DeveloperCommands
                 {
                     boxed = new object[argc];
                 }
-                else
+                else if (argc < paramc - _numOptionalParams)
                 {
-                    if (args.Length != paramc)
-                    {
-                        context.Notify("Parameter count mismatch.");
-                        return false;
-                    }
-                    boxed = new object[paramc];
+                    context.Notify("Parameter count mismatch.");
+                    return false;
                 }
+
+                boxed = Enumerable.Repeat(Type.Missing, paramc).ToArray();
 
                 // Convert parameters to the proper types
                 for (int i = 0; i < argc; i++)

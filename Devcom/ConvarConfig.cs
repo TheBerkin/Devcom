@@ -11,8 +11,15 @@ namespace DeveloperCommands
     /// </summary>
     public static class ConvarConfig
     {
+        /// <summary>
+        /// The default file name for the convar configuration file.
+        /// </summary>
         public const string DefaultConfigFile = "devcom.cfg";
 
+        /// <summary>
+        /// Saves all current convar values to the specified path.
+        /// </summary>
+        /// <param name="path">The path to the configuration file.</param>
         public static void SaveConvars(string path = DefaultConfigFile)
         {
             try
@@ -37,6 +44,10 @@ namespace DeveloperCommands
             }
         }
 
+        /// <summary>
+        /// Loads convars from a file into memory.
+        /// </summary>
+        /// <param name="path">The path to the configuration file to load.</param>
         public static void LoadConvars(string path = DefaultConfigFile)
         {
             if (!File.Exists(DefaultConfigFile))

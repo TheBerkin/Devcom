@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace DeveloperCommands
 {
+    /// <summary>
+    /// Represents a convar bound to a static property.
+    /// </summary>
     public sealed class PropertyConvar : Convar
     {
         private readonly PropertyInfo _property;

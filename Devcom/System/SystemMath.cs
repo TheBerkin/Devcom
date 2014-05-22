@@ -1,7 +1,7 @@
 ﻿namespace DeveloperCommands
 {
     [Category("math")]
-    public static class SystemMath
+    internal static class SystemMath
     {
         [Command("add", "Adds two values and stores the sum in a convar.")]
         public static void Add(Context context, double a, double b, string cvOut)
