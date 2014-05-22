@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace DeveloperCommands
 {
@@ -9,7 +8,7 @@ namespace DeveloperCommands
     public abstract class Convar
     {
         private readonly string _name, _desc, _cat;
-        protected readonly dynamic _defaultValue;
+        protected internal readonly dynamic _defaultValue;
 
         internal Convar(string name, string desc, string cat, object defaultValue)
         {

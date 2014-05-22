@@ -13,6 +13,7 @@ namespace DeveloperCommands
     public sealed class PropertyConvar : Convar
     {
         private readonly PropertyInfo _property;
+
         internal PropertyConvar(PropertyInfo property, string name, string desc, string cat, object defaultValue) : base(name, desc, cat, defaultValue)
         {
             if (property != null)
