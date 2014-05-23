@@ -46,7 +46,7 @@ namespace DeveloperCommands
                 if (!found) continue;
 
                 // Load commands
-                foreach (var method in cl.GetMethods().Where(m => m.IsStatic && m.IsPublic))
+                foreach (var method in cl.GetMethods().Where(m => m.IsStatic))
                 {
                     var attrs = method.GetCustomAttributes();
                     var attributes = attrs as Attribute[] ?? attrs.ToArray();
