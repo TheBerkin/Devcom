@@ -130,21 +130,16 @@ namespace DeveloperCommands
             int paramc = _paramList.Length - 1;
             try
             {
-                object[] boxed;
-                if (_hasParamsArgument)
-                {
-                    boxed = new object[argc];
-                }
-                else if (argc < paramc - _numOptionalParams)
+                if ((_hasParamsArgument && argc < paramc) || (argc < paramc - _numOptionalParams) || (!_hasParamsArgument && argc > paramc))
                 {
                     context.Notify("Parameter count mismatch.");
                     return false;
                 }
 
-                boxed = Enumerable.Repeat(Type.Missing, paramc).ToArray();
+                var boxed = Enumerable.Repeat(Type.Missing, paramc).ToArray();
 
                 // Convert parameters to the proper types
-                for (int i = 0; i < argc; i++)
+                for (int i = 0; i < paramc; i++)
                 {
                     boxed[i] = Util.ChangeType(args[i], _paramList[(i >= paramc ? paramc - 1 : i) + 1].ParameterType);   
                 }

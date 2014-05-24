@@ -2,15 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace DeveloperCommands
 {
     internal static class Extensions
     {
+        private static readonly Dictionary<char, char> _escapeChars = new Dictionary<char, char>()
+        {
+            {'n', '\n'},
+            {'r', '\r'},
+            {'t', '\t'},
+            {'b', '\b'},
+            {'f', '\f'},
+            {'v', '\v'},
+            {'0', '\0'}
+        };
+
         public static IEnumerable<string> ParseParams(this string str)
         {
-            var list = new List<string>();
+            str = Regex.Replace(str, @"\\((?<u>u(?<hex>[a-fA-F0-9]{1,4}))|(?<c>\S))", m =>
+            {
+                var c = m.Groups["c"].Value;
+                var u = m.Groups["u"].Value;
+                if (u.Length > 0)
+                {
+                    return ((char)Convert.ToInt32(m.Groups["hex"].Value, 16)).ToString();
+                }
+                char ec;
+                return _escapeChars.TryGetValue(c[0], out ec) ? ec.ToString() : m.Value;
+            }, RegexOptions.ExplicitCapture);
             var sb = new StringBuilder();
             int spc = 0;
             bool quote = false;
@@ -35,7 +57,7 @@ namespace DeveloperCommands
                 {
                     if (sb.Length > 0)
                     {
-                        list.Add(sb.ToString());
+                        yield return sb.ToString();
                         sb.Clear();
                     }
                     constant = true;
@@ -49,7 +71,8 @@ namespace DeveloperCommands
                         spc++;
                         continue;
                     }
-                    else if (spc > 0 && sb.Length > 0)
+
+                    if (spc > 0 && sb.Length > 0)
                     {
                         sb.Append(new String(' ', spc));
                         spc = 0;
@@ -62,7 +85,7 @@ namespace DeveloperCommands
                         quote = !quote;
                         if (!quote)
                         {
-                            list.Add(sb.ToString());
+                            yield return sb.ToString();
                             sb.Clear();
                         }
                         continue;
@@ -74,7 +97,7 @@ namespace DeveloperCommands
                         {
                             if (sb.Length > 0)
                             {
-                                list.Add(sb.ToString());
+                                yield return sb.ToString();
                                 sb.Clear();
                             }
                             continue;
@@ -88,10 +111,8 @@ namespace DeveloperCommands
 
             if (sb.Length > 0)
             {
-                list.Add(sb.ToString());
+                yield return sb.ToString();
             }
-
-            return list;
         }
     }
 }
