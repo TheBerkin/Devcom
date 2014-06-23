@@ -101,6 +101,69 @@ namespace DeveloperCommands
         }
 
         /// <summary>
+        /// Translates a command string into a reusable Call object.
+        /// </summary>
+        /// <param name="context">The context to attach to the call.</param>
+        /// <param name="command">The command string to translate.</param>
+        /// <returns></returns>
+        public static Call TranslateCommand(Context context, string command)
+        {
+            if (!_loaded) throw new InvalidOperationException("Cannot translate command calls without loading Devcom.");
+
+            context = context ?? Context.Default;
+
+            if (context == null) throw new ArgumentNullException("context");
+            if (String.IsNullOrEmpty(command))
+            {
+                return Call.None;
+            }
+
+            // Cut off spaces from both ends
+            command = command.Trim();
+
+            var calls = new List<CallArgs>();
+
+            foreach (var cmdstr in command.Split(new[] { '|', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim()))
+            {
+                // Split up the line into arguments
+                var parts = cmdstr.ParseParams().ToArray();
+                if (!parts.Any()) continue;
+
+                // The first index will be the command name
+                var first = parts.First().ToLower();
+
+                // Check if it's a root marker
+                if (first == "$")
+                {
+                    context.Category = "";
+                    continue;
+                }
+
+                // Make sure the command exists
+                Command cmd;
+                if (!Commands.TryGetValue(first, out cmd))
+                {
+                    throw new ArgumentException(String.Concat("Command not found: '", first, "'"));
+                }
+
+                if (parts.Length > 1)
+                {
+                    for (int i = 1; i < parts.Length; i++)
+                    {
+                        parts[i] = Regex.Replace(parts[i], @":(?<name>\S+):",
+                            m => Util.GetConvarValue(m.Groups["name"].Value, context.Category),
+                            RegexOptions.ExplicitCapture);
+                    }
+                }
+
+                calls.Add(cmd.TranslateArgs(context, parts));
+            }
+
+            return new Call(calls.ToArray());
+        }
+
+        /// <summary>
         /// Executes a command string under the specified context.
         /// </summary>
         /// <param name="context">The context under which to execute the command.</param>
@@ -173,6 +236,8 @@ namespace DeveloperCommands
                 cmd.Run(context, parts.Where((s, i) => i > 0).ToArray());
             }
         }
+
+
 
         /// <summary>
         /// Executes a command string asynchronously under the default context.

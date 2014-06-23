@@ -115,6 +115,45 @@ namespace DeveloperCommands
                 : "";
         }
 
+        internal CallArgs TranslateArgs(Context context, string[] args)
+        {
+            var currentContextType = context.GetType();
+
+            // Check context type compatability
+            if ((!currentContextType.IsSubclassOf(_contextType) && currentContextType != _contextType) || !ContextFilter.Test(currentContextType, Filter))
+            {
+                throw new ArgumentException(String.Concat("Incompatible context type: '", currentContextType.Name, "'"));
+            }
+
+            int argc = args.Length;
+            int paramc = _paramList.Length - 1;
+            if ((_hasParamsArgument && argc < paramc) || (argc < paramc - _numOptionalParams) || (!_hasParamsArgument && argc > paramc))
+            {
+                throw new ArgumentException("Parameter count mismatch.");
+            }
+
+            var boxed = Enumerable.Repeat(Type.Missing, paramc).ToArray();
+
+            // Convert parameters to the proper types
+            for (int i = 0; i < paramc; i++)
+            {
+                boxed[i] = Util.ChangeType(args[i], _paramList[(i >= paramc ? paramc - 1 : i) + 1].ParameterType);
+            }
+
+            var argsFormatted = new List<object> { context };
+
+            // Add all arguments except for any marked as 'params'
+            argsFormatted.AddRange(boxed.Take(_hasParamsArgument ? paramc - 1 : paramc));
+
+            // Insert params argument as an array (it needs to be represented as a single object)
+            if (_hasParamsArgument)
+            {
+                argsFormatted.Add(args.Where((o, i) => i >= paramc - 1).ToArray());
+            }
+
+            return new CallArgs(_method, argsFormatted);
+        }
+
         internal bool Run(Context context, params string[] args)
         {
             var currentContextType = context.GetType();

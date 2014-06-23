@@ -5,6 +5,7 @@ namespace DeveloperCommands
 {
     internal static class Util
     {
+
         public static object ChangeType(object obj, Type convertType)
         {
             if (obj == null) return null;
