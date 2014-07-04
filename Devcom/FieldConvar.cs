@@ -13,7 +13,7 @@ namespace DeveloperCommands
     public sealed class FieldConvar : Convar
     {
         private readonly FieldInfo _field;
-        internal FieldConvar(FieldInfo field, string name, string desc, string cat, object defaultValue) : base(name, desc, cat, defaultValue)
+        internal FieldConvar(FieldInfo field, string name, string desc, string cat, object defaultValue, bool savable) : base(name, desc, cat, defaultValue, savable)
         {
             if (field != null)
             {

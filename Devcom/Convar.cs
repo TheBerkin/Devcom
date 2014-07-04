@@ -8,14 +8,24 @@ namespace DeveloperCommands
     public abstract class Convar
     {
         private readonly string _name, _desc, _cat;
+        private readonly bool _savable;
         protected internal readonly dynamic _defaultValue;
 
-        internal Convar(string name, string desc, string cat, object defaultValue)
+        internal Convar(string name, string desc, string cat, object defaultValue, bool savable)
         {
             _defaultValue = defaultValue;
             _name = name;
             _desc = desc;
             _cat = cat;
+            _savable = savable;
+        }
+
+        /// <summary>
+        /// Determines if the convar should be allowed to have its value saved in configuration files.
+        /// </summary>
+        public bool Savable
+        {
+            get { return _savable; }
         }
 
         /// <summary>
@@ -70,11 +80,12 @@ namespace DeveloperCommands
         /// <param name="name">The name of the convar.</param>
         /// <param name="description">The descriptiono of the convar.</param>
         /// <param name="category">The category the convar belongs to.</param>
+        /// <param name="savable">Determines if the convar should be allowed to have its value saved in configuration files.</param>
         /// <returns>Returns the created convar, or null if a convar with the specified name already exists.</returns>
-        public static ObjectConvar CreateConvar(object value, string name, string description, string category)
+        public static ObjectConvar CreateConvar(object value, string name, string description, string category, bool savable)
         {
             if (Devcom.Convars.ContainsKey(Util.Qualify(category, name))) return null;
-            var convar = new ObjectConvar(value, name, description, category);
+            var convar = new ObjectConvar(value, name, description, category, savable);
             Devcom.Convars[convar.QualifiedName] = convar;
             return convar;
         }
@@ -87,11 +98,12 @@ namespace DeveloperCommands
         /// <param name="description">The descriptiono of the convar.</param>
         /// <param name="category">The category the convar belongs to.</param>
         /// <param name="defaultValue">The default value to assign to the convar.</param>
+        /// <param name="savable">Determines if the convar should be allowed to have its value saved in configuration files.</param>
         /// <returns>Returns the created convar, or null if a convar with the specified name already exists.</returns>
-        public static PropertyConvar CreateConvar(PropertyInfo property, string name, string description, string category, object defaultValue = null)
+        public static PropertyConvar CreateConvar(PropertyInfo property, string name, string description, string category, object defaultValue = null, bool savable = true)
         {
             if (Devcom.Convars.ContainsKey(Util.Qualify(category, name))) return null;
-            var convar = new PropertyConvar(property, name, description, category, defaultValue);
+            var convar = new PropertyConvar(property, name, description, category, defaultValue, savable);
             Devcom.Convars[convar.QualifiedName] = convar;
             return convar;
         }
@@ -104,11 +116,12 @@ namespace DeveloperCommands
         /// <param name="description">The descriptiono of the convar.</param>
         /// <param name="category">The category the convar belongs to.</param>
         /// <param name="defaultValue">The default value to assign to the convar.</param>
+        /// <param name="savable">Determines if the convar should be allowed to have its value saved in configuration files.</param>
         /// <returns>Returns the created convar, or null if a convar with the specified name already exists.</returns>
-        public static FieldConvar CreateConvar(FieldInfo field, string name, string description, string category, object defaultValue = null)
+        public static FieldConvar CreateConvar(FieldInfo field, string name, string description, string category, object defaultValue = null, bool savable = true)
         {
             if (Devcom.Convars.ContainsKey(Util.Qualify(category, name))) return null;
-            var convar = new FieldConvar(field, name, description, category, defaultValue);
+            var convar = new FieldConvar(field, name, description, category, defaultValue, savable);
             Devcom.Convars[convar.QualifiedName] = convar;
             return convar;
         }

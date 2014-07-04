@@ -72,7 +72,7 @@ namespace DeveloperCommands
                                 p => p.GetGetMethod().IsStatic && p.GetGetMethod().IsPublic && p.GetSetMethod().IsPublic)
                             .SelectMany(p => p.GetCustomAttributes<ConvarAttribute>()
                                 .Where(attr => !convars.ContainsKey(Util.Qualify(cat, attr.Name)))
-                                .Select(attr => new PropertyConvar(p, attr.Name, attr.Description, cat, attr.DefaultValue))))
+                                .Select(attr => new PropertyConvar(p, attr.Name, attr.Description, cat, attr.DefaultValue, attr.Savable))))
                 {
                     convars[convar.QualifiedName] = convar;
                 }
@@ -82,7 +82,7 @@ namespace DeveloperCommands
                         f => f.IsStatic && f.IsPublic)
                     .SelectMany(f => f.GetCustomAttributes<ConvarAttribute>()
                         .Where(attr => !convars.ContainsKey(Util.Qualify(cat, attr.Name)))
-                        .Select(attr => new FieldConvar(f, attr.Name, attr.Description, cat, attr.DefaultValue))))
+                        .Select(attr => new FieldConvar(f, attr.Name, attr.Description, cat, attr.DefaultValue, attr.Savable))))
                 {
                     convars[convar.QualifiedName] = convar;
                 }

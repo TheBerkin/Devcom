@@ -14,7 +14,7 @@ namespace DeveloperCommands
     {
         private readonly PropertyInfo _property;
 
-        internal PropertyConvar(PropertyInfo property, string name, string desc, string cat, object defaultValue) : base(name, desc, cat, defaultValue)
+        internal PropertyConvar(PropertyInfo property, string name, string desc, string cat, object defaultValue, bool savable) : base(name, desc, cat, defaultValue, savable)
         {
             if (property != null)
             {

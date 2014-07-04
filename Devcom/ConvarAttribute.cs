@@ -26,18 +26,25 @@ namespace DeveloperCommands
         /// <summary>
         /// Creates a new Convar attribute using the specified name and description.
         /// </summary>
-        /// <param name="name">The name of the convar.</param>
-        /// <param name="desc">The description of the convar.</param>
-        /// <param name="defaultValue">The default value of the convar.</param>
-        public ConvarAttribute(string name, string desc = "", object defaultValue = null)
+        /// <param name="Name">The name of the convar.</param>
+        /// <param name="Description">The description of the convar.</param>
+        /// <param name="DefaultValue">The default value of the convar.</param>
+        /// <param name="Savable">Determines if the convar should be allowed to have its value saved in configuration files.</param>
+        public ConvarAttribute(string Name, string Description = "", object DefaultValue = null, bool Savable = true)
         {
-            if (!Util.IsValidName(name, "-_"))
+            if (!Util.IsValidName(Name, "-_"))
             {
                 throw new ArgumentException("Convar names can only contain letters, numbers, underscores and dashes.");
             }
-            Name = name.ToLower();
-            Description = desc;
-            DefaultValue = defaultValue;
+            this.Name = Name.ToLower();
+            this.Description = Description;
+            this.DefaultValue = DefaultValue;
+            this.Savable = Savable;
         }
+
+        /// <summary>
+        /// Determines if the convar should be allowed to have its value saved in configuration files.
+        /// </summary>
+        public bool Savable { get; private set; }
     }
 }

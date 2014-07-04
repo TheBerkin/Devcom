@@ -10,7 +10,7 @@ namespace DeveloperCommands
         private dynamic _value;
         private readonly Type _valueType;
 
-        internal ObjectConvar(object value, string name, string desc, string cat) : base(name, desc, cat, value)
+        internal ObjectConvar(object value, string name, string desc, string cat, bool savable) : base(name, desc, cat, value, savable)
         {
             if (_value == null)
             {

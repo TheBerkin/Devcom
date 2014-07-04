@@ -27,7 +27,7 @@ namespace DeveloperCommands
                 using (var writer = new StreamWriter(path))
                 {
                     string prev = "";
-                    foreach (var convar in Devcom.Convars.OrderBy(kvp => kvp.Key))
+                    foreach (var convar in Devcom.Convars.Where(pair => pair.Value.Savable).OrderBy(kvp => kvp.Key))
                     {
                         if (prev != "" && convar.Value.Category != prev)
                         {
