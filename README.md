@@ -20,7 +20,7 @@ static void Main(string[] args)
 
 ###Commands
 
-Defining new commands is a straightforward, easy process. Make a class marked with the `[DevcomCategory]` attribute. Then add static methods inside it with `[Command]` attributes that define what the commands are called.
+Defining new commands is a straightforward, easy process. Make a class marked with the `[Category]` attribute. Then add static methods inside it with `[Command]` attributes that define what the commands are called.
 
 ```cs
 using System;
