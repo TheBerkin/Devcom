@@ -177,7 +177,7 @@ namespace DeveloperCommands
 
             if (SystemConvars.EchoInput)
             {
-                context.Notify(command);
+                context.Notify("> " + command);
             }
 
             // Don't interpret empty commands
