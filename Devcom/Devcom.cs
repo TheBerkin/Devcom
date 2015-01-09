@@ -33,7 +33,7 @@ namespace DeveloperCommands
             if (_loaded) return;
             Scanner.FindAllDefs(Commands, Convars);
             if (loadConfig) ConvarConfig.LoadConvars();
-            Print(CopyrightString);
+            Log(CopyrightString);
             _loaded = true;
         }
 
@@ -54,32 +54,15 @@ namespace DeveloperCommands
             }
 
             if (loadConfig) ConvarConfig.LoadConvars();
-            Print(CopyrightString);
+            Log(CopyrightString);
             _loaded = true;
-        }
-
-        /// <summary>
-        /// Prints a formatted message to the Devcom output.
-        /// </summary>
-        /// <param name="message">The format string to pass.</param>
-        /// <param name="args">The arguments to insert into the format string.</param>
-        public static void PrintFormat(string message, params object[] args)
-        {
-            if (OnPrint != null)
-            {
-                OnPrint(String.Format(message, args));
-            }
-            else
-            {
-                Console.WriteLine(message, args);
-            }
         }
 
         /// <summary>
         /// Prints an object's string value to the Devcom output.
         /// </summary>
         /// <param name="value">The value to print.</param>
-        public static void Print(object value)
+        public static void Log(object value)
         {
             if (OnPrint != null)
             {
@@ -95,9 +78,9 @@ namespace DeveloperCommands
         /// Executes a command string under the default context.
         /// </summary>
         /// <param name="command">The command to execute.</param>
-        public static void SendCommand(string command)
+        public static void Submit(string command)
         {
-            SendCommand(Context.Default, command);
+            Submit(Context.Default, command);
         }
 
         /// <summary>
@@ -168,7 +151,7 @@ namespace DeveloperCommands
         /// </summary>
         /// <param name="context">The context under which to execute the command.</param>
         /// <param name="command">The command to execute.</param>
-        public static void SendCommand(Context context, string command)
+        public static void Submit(Context context, string command)
         {
             if (!_loaded) return;
 
@@ -245,7 +228,7 @@ namespace DeveloperCommands
         /// <param name="command">The command to execute.</param>
         public static async void SendCommandAsync(string command)
         {
-            await Task.Run(() => SendCommand(Context.Default, command));
+            await Task.Run(() => Submit(Context.Default, command));
         }
 
         /// <summary>
@@ -255,7 +238,7 @@ namespace DeveloperCommands
         /// <param name="command">The command to execute.</param>
         public static async void SendCommandAsync(Context context, string command)
         {
-            await Task.Run(() => SendCommand(context, command));
+            await Task.Run(() => Submit(context, command));
         }
 
         /// <summary>

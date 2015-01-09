@@ -62,7 +62,7 @@ namespace DeveloperCommands
         /// <param name="message"></param>
         public virtual void Notify(string message)
         {
-            Devcom.Print(message);
+            Devcom.Log(message);
         }
 
         /// <summary>

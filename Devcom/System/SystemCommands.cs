@@ -63,7 +63,7 @@ namespace DeveloperCommands
                         {
                             // ReSharper disable once PossibleNullReferenceException
                             // ReadLine() should never be null since the loop breaks at EOF
-                            Devcom.SendCommand(context, reader.ReadLine().Trim());
+                            Devcom.Submit(context, reader.ReadLine().Trim());
                         }
                     }
                 }

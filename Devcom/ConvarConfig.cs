@@ -40,7 +40,7 @@ namespace DeveloperCommands
             }
             catch (Exception ex)
             {
-                Devcom.Print("Failed to save "+path+": '" + ex.Message + "'");
+                Devcom.Log("Failed to save "+path+": '" + ex.Message + "'");
             }
         }
 
@@ -52,7 +52,7 @@ namespace DeveloperCommands
         {
             if (!File.Exists(DefaultConfigFile))
             {
-                Devcom.Print("Couldn't find " + path + ".");
+                Devcom.Log("Couldn't find " + path + ".");
                 return;
             }
 
@@ -76,7 +76,7 @@ namespace DeveloperCommands
             }
             catch (Exception ex)
             {
-                Devcom.Print("Failed to load " + path + ": '" + ex.Message + "'");
+                Devcom.Log("Failed to load " + path + ": '" + ex.Message + "'");
             }
         }
     }
