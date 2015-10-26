@@ -1,6 +1,8 @@
 Devcom
 ======
 
+![Build Status](https://ci.appveyor.com/api/projects/status/okhf8k49cjdql4tf?svg=true)
+
 Devcom (short for Developer Commands) is a simple, extensible system for adding command-line interfaces to applications, games, and other interactive media running on the CLR.
 
 A simple Devcom command-line can be created with just a few lines of code:
