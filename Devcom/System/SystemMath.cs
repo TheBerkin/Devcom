@@ -1,4 +1,6 @@
-﻿namespace DeveloperCommands
+﻿using System;
+
+namespace DeveloperCommands
 {
     [Category("math")]
     internal static class SystemMath

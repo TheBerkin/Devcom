@@ -1,14 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DeveloperCommands
 {
     internal static class Util
     {
+		private static readonly Dictionary<Type, HashSet<string>> enumCache = new Dictionary<Type, HashSet<string>>();
+
+	    private static void CacheEnum(Type enumType)
+	    {
+			if (enumType == null || !enumType.IsEnum || enumCache.ContainsKey(enumType)) return;
+			enumCache[enumType] = new HashSet<string>(Enum.GetNames(enumType), StringComparer.InvariantCultureIgnoreCase);
+	    }
 
         public static object ChangeType(object obj, Type convertType)
         {
             if (obj == null) return null;
+	        if (convertType.IsEnum)
+	        {
+		        CacheEnum(convertType);
+		        var name = obj.ToString().Trim();
+		        if (!enumCache[convertType].Contains(name)) return Activator.CreateInstance(convertType);
+		        return Enum.Parse(convertType, name, true);
+	        }
             if (convertType == typeof(bool))
             {
                 var objString = obj.ToString().ToLower().Trim();

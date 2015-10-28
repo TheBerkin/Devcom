@@ -95,7 +95,7 @@ namespace DeveloperCommands
 
             context = context ?? Context.Default;
 
-            if (context == null) throw new ArgumentNullException("context");
+            if (context == null) throw new ArgumentNullException(nameof(context));
             if (String.IsNullOrEmpty(command))
             {
                 return Call.None;
@@ -284,7 +284,7 @@ namespace DeveloperCommands
         {
             if (name == null)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
 
             name = name.Trim().ToLower();
